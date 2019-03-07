@@ -26,9 +26,14 @@ void ACustomPlayerController::InitCamera()
 	}
 }
 
-void ACustomPlayerController::Attack()
+void ACustomPlayerController::StartAttack()
 {
-	controlledPawn->GetCurrentWeapon()->Fire();
+	controlledPawn->GetCurrentWeapon()->StartFire();
+}
+
+void ACustomPlayerController::StopAttack()
+{
+	controlledPawn->GetCurrentWeapon()->StopFire();
 }
 
 void ACustomPlayerController::Reload()
@@ -44,7 +49,8 @@ void ACustomPlayerController::SetupInputComponent()
 	InputComponent->BindAxis("LookUp", this, &ACustomPlayerController::LookUp);
 	InputComponent->BindAxis("TurnAround", this, &ACustomPlayerController::TurnAround);
 
-	InputComponent->BindAction("Attack", EInputEvent::IE_Pressed, this, &ACustomPlayerController::Attack);
+	InputComponent->BindAction("Attack", EInputEvent::IE_Pressed, this, &ACustomPlayerController::StartAttack);
+	InputComponent->BindAction("Attack", EInputEvent::IE_Released, this, &ACustomPlayerController::StopAttack);
 	InputComponent->BindAction("Reload", EInputEvent::IE_Pressed, this, &ACustomPlayerController::Reload);
 }
 

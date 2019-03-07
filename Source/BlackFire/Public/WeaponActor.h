@@ -17,17 +17,17 @@ public:
 	AWeaponActor();
 
 	UFUNCTION()
-	void Fire();
+	void StartFire();
+
+	UFUNCTION()
+	void StopFire();
 
 	UFUNCTION()
 	void Reload();
 
 	void SetOwnerTeam(ETeam newTeam);
 
-	virtual void Tick(float DeltaTime) override;
-
 protected:
-	virtual void BeginPlay() override;
 
 	uint8 currentAmmo;
 	uint8 maxAmmoInMagazine;
@@ -41,7 +41,25 @@ protected:
 	bool isReloading;
 
 	ETeam currentTeam;
+
+	UPROPERTY()
+	UTimelineComponent* firingTimeline;
+
+	UPROPERTY()
+	UTimelineComponent* reloadingTimeline;
+
+	bool CanStartFiringTimeline();
+	bool CanStartReloadingTimeline();
+
+	virtual void BeginPlay() override;
+
+	void InitFiringTimeline();
+	void InitReloadingTimeline();
+
+	UFUNCTION()
+	void FiringTimelineStarted();
 	
-private:
-	FTimeline timeline;
+	UFUNCTION()
+	void ReloadingTimelineStarted();
+
 };

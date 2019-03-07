@@ -27,7 +27,8 @@ private:
 	inline void InitControlledPawn();
 	void InitCamera();
 
-	void Attack() override;
+	void StartAttack() override;
+	void StopAttack() override;
 	void Reload() override;
 	void SetupInputComponent() override;
 
