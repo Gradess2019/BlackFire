@@ -33,15 +33,28 @@ public:
 
 protected:
 
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon config")
 	uint16 currentAmmoInMagazine;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon config")
 	uint16 maxAmmoInMagazine;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon config")
 	uint16 currentAmmo;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon config")
 	uint16 maxAmmo;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon config")
 	float damage;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon config")
 	float reloadingTime;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon config")
 	float fireRate;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon config")
 	EShootingMode mode;
 
 	ETeam currentTeam;
