@@ -26,21 +26,6 @@ void ACustomPlayerController::InitCamera()
 	}
 }
 
-void ACustomPlayerController::StartAttack()
-{
-	controlledPawn->GetCurrentWeapon()->StartFire();
-}
-
-void ACustomPlayerController::StopAttack()
-{
-	controlledPawn->GetCurrentWeapon()->StopFire();
-}
-
-void ACustomPlayerController::Reload()
-{
-	controlledPawn->GetCurrentWeapon()->Reload();
-}
-
 void ACustomPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
@@ -117,3 +102,17 @@ void ACustomPlayerController::TurnAround(float value)
 	}
 }
 
+void ACustomPlayerController::StartAttack()
+{
+	controlledPawn->GetCurrentWeapon()->StartFire();
+}
+
+void ACustomPlayerController::StopAttack()
+{
+	controlledPawn->GetCurrentWeapon()->StopFire();
+}
+
+void ACustomPlayerController::Reload()
+{
+	controlledPawn->GetCurrentWeapon()->Reload();
+}

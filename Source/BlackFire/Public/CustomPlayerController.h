@@ -27,9 +27,7 @@ private:
 	inline void InitControlledPawn();
 	void InitCamera();
 
-	void StartAttack() override;
-	void StopAttack() override;
-	void Reload() override;
+	
 	void SetupInputComponent() override;
 
 	void MoveForward(float value);
@@ -44,5 +42,9 @@ private:
 
 	inline FVector GetRightDirection();
 	inline FVector GetForwardDirection();
+
+	inline void StartAttack() override;
+	inline void StopAttack() override;
+	inline void Reload() override;
 
 };

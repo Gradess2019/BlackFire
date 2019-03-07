@@ -42,9 +42,6 @@ protected:
 	float reloadingTime;
 	float fireRate;
 
-	bool isFiring;
-	bool isReloading;
-
 	ETeam currentTeam;
 
 	UTimelineComponent* fireTimeline;
@@ -56,8 +53,8 @@ private:
 	void InitFireTimeline();
 	void InitReloadTimeline();
 
-	inline bool IsTimelinesStopped();
 	inline bool IsValidTimelines();
+	inline bool IsTimelinesStopped();
 	inline bool CanStartFireTimeline();
 	inline bool CanStartReloadTimeline();
 

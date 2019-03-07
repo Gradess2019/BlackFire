@@ -63,14 +63,14 @@ bool AWeaponActor::CanStartFireTimeline()
 	return IsValidTimelines() && IsTimelinesStopped() && HasAmmoInMagazine();
 }
 
-bool AWeaponActor::IsTimelinesStopped()
-{
-	return !fireTimeline->IsPlaying() && !reloadTimeline->IsPlaying();
-}
-
 bool AWeaponActor::IsValidTimelines()
 {
 	return IsValid(fireTimeline) && IsValid(reloadTimeline);
+}
+
+bool AWeaponActor::IsTimelinesStopped()
+{
+	return !fireTimeline->IsPlaying() && !reloadTimeline->IsPlaying();
 }
 
 bool AWeaponActor::HasAmmoInMagazine()
