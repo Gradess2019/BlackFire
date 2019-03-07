@@ -1,0 +1,101 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#include "CustomPlayerController.h"
+
+void ACustomPlayerController::BeginPlay()
+{
+	InitControlledPawn();
+	InitCamera();
+}
+
+void ACustomPlayerController::InitControlledPawn()
+{
+	controlledPawn = Cast<ACustomCharacter>(GetPawn());
+}
+
+void ACustomPlayerController::InitCamera()
+{
+	TSet<UActorComponent*> components = controlledPawn->GetComponents();
+	for (UActorComponent* component : components)
+	{
+		if (component->IsA(UCameraComponent::StaticClass()))
+		{
+			playerCamera = Cast<UCameraComponent>(component);
+			break;
+		}
+	}
+}
+
+void ACustomPlayerController::Attack()
+{
+	controlledPawn->GetCurrentWeapon()->Fire();
+}
+
+void ACustomPlayerController::Reload()
+{
+	controlledPawn->GetCurrentWeapon()->Reload();
+}
+
+void ACustomPlayerController::SetupInputComponent()
+{
+	Super::SetupInputComponent();
+	InputComponent->BindAxis("MoveForward", this, &ACustomPlayerController::MoveForward);
+	InputComponent->BindAxis("MoveRight", this, &ACustomPlayerController::MoveRight);
+	InputComponent->BindAxis("LookUp", this, &ACustomPlayerController::LookUp);
+	InputComponent->BindAxis("TurnAround", this, &ACustomPlayerController::TurnAround);
+}
+
+void ACustomPlayerController::MoveForward(float value)
+{
+	if (!IsInputZero(value))
+	{
+		FVector direction = GetForwardDirection();
+		Move(direction, value);
+	}
+}
+
+bool ACustomPlayerController::IsInputZero(float value)
+{
+	return value == 0.f
+}
+
+FVector ACustomPlayerController::GetForwardDirection()
+{
+	return UKismetMathLibrary::GetForwardVector(controlledPawn->GetActorRotation());
+}
+
+void ACustomPlayerController::Move(FVector direction, float value)
+{
+	controlledPawn->AddMovementInput(direction, value);
+}
+
+void ACustomPlayerController::MoveRight(float value)
+{
+	if (IsInputZero(value))
+	{
+		FVector direction = GetRightDirection();
+		Move(direction, value);
+	}
+}
+
+FVector ACustomPlayerController::GetRightDirection()
+{
+	return UKismetMathLibrary::GetRightVector(controlledPawn->GetActorRotation());
+}
+
+void ACustomPlayerController::LookUp(float value)
+{
+	if (IsInputZero(value))
+	{
+		AddPitchInput(value);
+	}
+}
+
+void ACustomPlayerController::TurnAround(float value)
+{
+	if (IsInputZero(value))
+	{
+		AddYawInput(value);
+	}
+}
+
