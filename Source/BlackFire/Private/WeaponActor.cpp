@@ -7,8 +7,10 @@ AWeaponActor::AWeaponActor()
 	PrimaryActorTick.bCanEverTick = true;
 }
 
-void AWeaponActor::OnConstruction(const FTransform& Transform)
+void AWeaponActor::BeginPlay()
 {
+	Super::BeginPlay();
+
 	InitFireTimeline();
 	InitReloadTimeline();
 	if (IsValidTimelines())
