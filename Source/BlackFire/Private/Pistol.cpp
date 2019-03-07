@@ -4,10 +4,12 @@
 
 APistol::APistol()
 {
-	currentAmmo = 7;
-	maxAmmoInMagazine = 7;
-	maxAmmo = 49;
-	damage = 15.f;
-	reloadingTime = 1.5f;
-	fireRate = 120.f;
+	currentAmmoInMagazine = 10;
+	maxAmmoInMagazine = 10;
+	currentAmmo = 50;
+	maxAmmo = 50;
+
+	damage = 15;
+	reloadingTime = 1.f;
+	fireRate = 240;
 }
