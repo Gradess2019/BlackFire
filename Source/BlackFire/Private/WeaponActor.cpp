@@ -40,7 +40,7 @@ void AWeaponActor::InitReloadTimeline()
 
 void AWeaponActor::StartFire()
 {
-	UE_LOG(LogTemp, Warning, TEXT("FIRE! Damage %d, current ammo %d, max ammo %d, max ammo in magazine %d, reloading time %d, fire rate %d"), damage, currentAmmo, maxAmmo, maxAmmoInMagazine, reloadingTime, fireRate);
+	UE_LOG(LogTemp, Warning, TEXT("Weapon info: Damage %f, current ammo %d, max ammo %d, max ammo in magazine %d, reloading time %f, fire rate %f"), damage, currentAmmo, maxAmmo, maxAmmoInMagazine, reloadingTime, fireRate);
 }
 
 void AWeaponActor::StopFire()
