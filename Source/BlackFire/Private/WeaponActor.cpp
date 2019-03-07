@@ -45,6 +45,10 @@ void AWeaponActor::InitReloadTimeline()
 	reloadEvent.BindUFunction(this, FName("Reload"));
 	reloadTimeline->AddEvent(0.f, reloadEvent);
 
+	FOnTimelineEventStatic fillMagazineEvent;
+	fillMagazineEvent.BindUFunction(this, FName("FillMagazine"));
+	reloadTimeline->SetTimelineFinishedFunc(fillMagazineEvent);
+
 	reloadTimeline->RegisterComponent();
 }
 
@@ -55,7 +59,6 @@ void AWeaponActor::StartFire()
 		UE_LOG(LogTemp, Warning, TEXT("Weapon info: Damage %f, current ammo %d, max ammo %d, max ammo in magazine %d, reloading time %f, fire rate %f"), damage, currentAmmo, maxAmmo, maxAmmoInMagazine, reloadingTime, fireRate);
 		fireTimeline->PlayFromStart();
 	}
-	
 }
 
 bool AWeaponActor::CanStartFireTimeline()
@@ -89,6 +92,7 @@ void AWeaponActor::StopFire()
 void AWeaponActor::Fire()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Firing!"));
+	currentAmmoInMagazine--;
 }
 
 void AWeaponActor::Reload()
@@ -118,4 +122,22 @@ bool AWeaponActor::HasAmmo()
 void AWeaponActor::SetOwnerTeam(ETeam newTeam)
 {
 	currentTeam = newTeam;
+}
+
+void AWeaponActor::FillMagazine()
+{
+	uint16 freeSpace = maxAmmoInMagazine - currentAmmoInMagazine;
+	if (freeSpace > 0)
+	{
+		if (currentAmmo > freeSpace)
+		{
+			currentAmmo -= freeSpace;
+		} else
+		{
+			freeSpace = currentAmmo;
+			currentAmmo = 0;
+		}
+		currentAmmoInMagazine += freeSpace;
+	}
+	
 }

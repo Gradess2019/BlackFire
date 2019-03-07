@@ -62,4 +62,7 @@ private:
 	inline bool HasSpaceInMagazine();
 	inline bool HasAmmo();
 	
+	UFUNCTION()
+	void FillMagazine();
+	
 };
