@@ -17,10 +17,7 @@ public:
 	AWeaponActor();
 
 	UFUNCTION()
-	void StartFire();
-
-	UFUNCTION()
-	void StopFire();
+	void Fire();
 
 	UFUNCTION()
 	void Reload();
@@ -41,25 +38,5 @@ protected:
 	bool isReloading;
 
 	ETeam currentTeam;
-
-	UPROPERTY()
-	UTimelineComponent* firingTimeline;
-
-	UPROPERTY()
-	UTimelineComponent* reloadingTimeline;
-
-	bool CanStartFiringTimeline();
-	bool CanStartReloadingTimeline();
-
-	virtual void BeginPlay() override;
-
-	void InitFiringTimeline();
-	void InitReloadingTimeline();
-
-	UFUNCTION()
-	void FiringTimelineStarted();
-	
-	UFUNCTION()
-	void ReloadingTimelineStarted();
 
 };

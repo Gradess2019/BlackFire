@@ -28,12 +28,12 @@ void ACustomPlayerController::InitCamera()
 
 void ACustomPlayerController::StartAttack()
 {
-	controlledPawn->GetCurrentWeapon()->StartFire();
+	//controlledPawn->GetCurrentWeapon()->StartFire();
 }
 
 void ACustomPlayerController::StopAttack()
 {
-	controlledPawn->GetCurrentWeapon()->StopFire();
+	//controlledPawn->GetCurrentWeapon()->StopFire();
 }
 
 void ACustomPlayerController::Reload()
