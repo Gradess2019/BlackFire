@@ -13,5 +13,5 @@ APistol::APistol()
 	reloadingTime = 1.f;
 	fireRate = 240;
 
-	mode = EShootingMode::Single;
+	mode = EShootingMode::Auto;
 }

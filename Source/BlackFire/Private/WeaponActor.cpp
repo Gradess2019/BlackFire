@@ -114,10 +114,14 @@ void AWeaponActor::StopFire()
 void AWeaponActor::Fire()
 {
 	currentAmmoInMagazine--;
-	UE_LOG(LogTemp, Warning, TEXT("Firing! Current ammo in magazine: %d"), currentAmmoInMagazine);
+	UE_LOG(LogTemp, Warning, TEXT("Current ammo in magazine: %d"), currentAmmoInMagazine);
 	if (!HasAmmoInMagazine())
 	{
 		fireTimeline->Stop();
+		if (CanStartReloadTimeline())
+		{
+			reloadTimeline->PlayFromStart();
+		}
 	}
 }
 
@@ -125,7 +129,6 @@ void AWeaponActor::Reload()
 {
 	if (CanStartReloadTimeline())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Reloading!"));
 		reloadTimeline->PlayFromStart();
 	}
 }
