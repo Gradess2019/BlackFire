@@ -14,7 +14,14 @@ class BLACKFIRE_API AWeaponActor : public AActor
 	GENERATED_BODY()
 	
 public:	
+
 	AWeaponActor();
+
+	UFUNCTION()
+	void StartFire();
+	
+	UFUNCTION()
+	void StopFire();
 
 	UFUNCTION()
 	void Fire();
@@ -38,5 +45,13 @@ protected:
 	bool isReloading;
 
 	ETeam currentTeam;
+
+	UTimelineComponent* fireTimeline;
+	UTimelineComponent* reloadTimeline;
+
+private:
+
+	void InitFireTimeline();
+	void InitReloadTimeline();
 
 };
