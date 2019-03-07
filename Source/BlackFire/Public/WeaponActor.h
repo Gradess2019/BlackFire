@@ -42,6 +42,8 @@ protected:
 	float reloadingTime;
 	float fireRate;
 
+	EShootingMode mode;
+
 	ETeam currentTeam;
 
 	UTimelineComponent* fireTimeline;
@@ -62,6 +64,8 @@ private:
 	inline bool HasSpaceInMagazine();
 	inline bool HasAmmo();
 	
+	void EnableShootingMode();
+
 	UFUNCTION()
 	void FillMagazine();
 	

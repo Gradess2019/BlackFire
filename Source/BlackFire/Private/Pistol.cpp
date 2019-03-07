@@ -12,4 +12,6 @@ APistol::APistol()
 	damage = 15;
 	reloadingTime = 1.f;
 	fireRate = 240;
+
+	mode = EShootingMode::Single;
 }

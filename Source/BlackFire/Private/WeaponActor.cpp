@@ -57,6 +57,8 @@ void AWeaponActor::StartFire()
 	if (CanStartFireTimeline())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Weapon info: Damage %f, current ammo %d, max ammo %d, max ammo in magazine %d, reloading time %f, fire rate %f"), damage, currentAmmo, maxAmmo, maxAmmoInMagazine, reloadingTime, fireRate);
+
+		EnableShootingMode();
 		fireTimeline->PlayFromStart();
 	}
 }
@@ -81,6 +83,26 @@ bool AWeaponActor::HasAmmoInMagazine()
 	return currentAmmoInMagazine > 0;
 }
 
+void AWeaponActor::EnableShootingMode()
+{
+	switch (mode)
+	{
+	
+		case EShootingMode::Single:
+		{
+			fireTimeline->SetLooping(false);
+			break;
+		}
+
+		case EShootingMode::Auto:
+		{
+			fireTimeline->SetLooping(true);
+			break;
+		}
+
+	}
+}
+
 void AWeaponActor::StopFire()
 {
 	if (fireTimeline->IsPlaying())
@@ -91,8 +113,12 @@ void AWeaponActor::StopFire()
 
 void AWeaponActor::Fire()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Firing!"));
 	currentAmmoInMagazine--;
+	UE_LOG(LogTemp, Warning, TEXT("Firing! Current ammo in magazine: %d"), currentAmmoInMagazine);
+	if (!HasAmmoInMagazine())
+	{
+		fireTimeline->Stop();
+	}
 }
 
 void AWeaponActor::Reload()
