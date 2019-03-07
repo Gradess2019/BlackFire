@@ -33,8 +33,8 @@ private:
 	inline void CreateCamera();
 	inline void AttachCamera();
 
-	void OnConstruction(const FTransform&);
-	
+	void OnConstruction(const FTransform&) override;
+	void BeginPlay() override;
 	inline void SetCameraRelativeLocation();
 
 	
