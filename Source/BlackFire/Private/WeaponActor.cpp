@@ -5,8 +5,16 @@
 AWeaponActor::AWeaponActor()
 {
 	PrimaryActorTick.bCanEverTick = true;
+}
+
+void AWeaponActor::OnConstruction(const FTransform& Transform)
+{
 	InitFireTimeline();
 	InitReloadTimeline();
+	if (IsValidTimelines())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("FUCKFUCKFUCK"));
+	}
 }
 
 void AWeaponActor::InitFireTimeline()
@@ -40,12 +48,40 @@ void AWeaponActor::InitReloadTimeline()
 
 void AWeaponActor::StartFire()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Weapon info: Damage %f, current ammo %d, max ammo %d, max ammo in magazine %d, reloading time %f, fire rate %f"), damage, currentAmmo, maxAmmo, maxAmmoInMagazine, reloadingTime, fireRate);
+	if (CanStartFireTimeline())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Weapon info: Damage %f, current ammo %d, max ammo %d, max ammo in magazine %d, reloading time %f, fire rate %f"), damage, currentAmmo, maxAmmo, maxAmmoInMagazine, reloadingTime, fireRate);
+		fireTimeline->PlayFromStart();
+	}
+	
+}
+
+bool AWeaponActor::CanStartFireTimeline()
+{
+	return IsValidTimelines() && IsTimelinesStopped() && HasAmmoInMagazine();
+}
+
+bool AWeaponActor::IsTimelinesStopped()
+{
+	return !fireTimeline->IsPlaying() && !reloadTimeline->IsPlaying();
+}
+
+bool AWeaponActor::IsValidTimelines()
+{
+	return IsValid(fireTimeline) && IsValid(reloadTimeline);
+}
+
+bool AWeaponActor::HasAmmoInMagazine()
+{
+	return currentAmmoInMagazine > 0;
 }
 
 void AWeaponActor::StopFire()
 {
-	
+	if (fireTimeline->IsPlaying())
+	{
+		fireTimeline->Stop();
+	}
 }
 
 void AWeaponActor::Fire()
@@ -55,7 +91,26 @@ void AWeaponActor::Fire()
 
 void AWeaponActor::Reload()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Reloading!"));
+	if (CanStartReloadTimeline())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Reloading!"));
+		reloadTimeline->PlayFromStart();
+	}
+}
+
+bool AWeaponActor::CanStartReloadTimeline()
+{
+	return IsValidTimelines() && IsTimelinesStopped() && HasSpaceInMagazine() && HasAmmo();
+}
+
+bool AWeaponActor::HasSpaceInMagazine()
+{
+	return currentAmmoInMagazine < maxAmmoInMagazine;
+}
+
+bool AWeaponActor::HasAmmo()
+{
+	return currentAmmo > 0;
 }
 
 void AWeaponActor::SetOwnerTeam(ETeam newTeam)

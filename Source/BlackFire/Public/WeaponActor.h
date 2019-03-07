@@ -33,8 +33,9 @@ public:
 
 protected:
 
-	uint8 currentAmmo;
-	uint8 maxAmmoInMagazine;
+	uint16 currentAmmoInMagazine;
+	uint16 maxAmmoInMagazine;
+	uint16 currentAmmo;
 	uint16 maxAmmo;
 
 	float damage;
@@ -50,8 +51,18 @@ protected:
 	UTimelineComponent* reloadTimeline;
 
 private:
+	virtual void OnConstruction(const FTransform& Transform) override;
 
 	void InitFireTimeline();
 	void InitReloadTimeline();
 
+	inline bool IsTimelinesStopped();
+	inline bool IsValidTimelines();
+	inline bool CanStartFireTimeline();
+	inline bool CanStartReloadTimeline();
+
+	inline bool HasAmmoInMagazine();
+	inline bool HasSpaceInMagazine();
+	inline bool HasAmmo();
+	
 };
