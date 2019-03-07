@@ -7,7 +7,7 @@ APlayerCharacter::APlayerCharacter()
 {
 	SetController();
 	SetUseControllerRotation();
-	InitCamera();
+	CreateAndAttachCamera();
 }
 
 void APlayerCharacter::SetController()
@@ -38,15 +38,14 @@ void APlayerCharacter::AttachCamera()
 	cameraComponent->SetupAttachment(RootComponent);
 }
 
-
-
-void APlayerCharacter::BeginPlay()
+void APlayerCharacter::OnConstruction(const FTransform& transform)
 {
+	Super::OnConstruction(transform);
 	SetCameraRelativeLocation();
 }
 
 void APlayerCharacter::SetCameraRelativeLocation()
 {
-	FVector relativeLocation = FVector(0.f, 0.f, zOffset);
+	FVector relativeLocation = FVector(0.f, 0.f, 60.f);
 	cameraComponent->SetRelativeLocation(relativeLocation);
 }

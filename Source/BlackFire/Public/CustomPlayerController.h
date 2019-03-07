@@ -37,6 +37,7 @@ private:
 	void TurnAround(float value);
 	
 	bool IsInputZero(float value);
+	bool IsCorrectCameraPitch(float value);
 
 	inline void Move(FVector direction, float value);
 
