@@ -22,7 +22,7 @@ public:
 private:
 	UCameraComponent* cameraComponent;
 	
-	UPROPERTY(EditDefaultsOnly, Category = "Character configuration");
+	UPROPERTY(EditDefaultsOnly, Category = "Character configuration")
 	float zOffset;
 
 	inline void SetController();

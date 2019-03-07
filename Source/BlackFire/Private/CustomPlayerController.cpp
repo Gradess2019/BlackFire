@@ -56,7 +56,7 @@ void ACustomPlayerController::MoveForward(float value)
 
 bool ACustomPlayerController::IsInputZero(float value)
 {
-	return value == 0.f
+	return value == 0.f;
 }
 
 FVector ACustomPlayerController::GetForwardDirection()
@@ -71,7 +71,7 @@ void ACustomPlayerController::Move(FVector direction, float value)
 
 void ACustomPlayerController::MoveRight(float value)
 {
-	if (IsInputZero(value))
+	if (!IsInputZero(value))
 	{
 		FVector direction = GetRightDirection();
 		Move(direction, value);
@@ -85,7 +85,7 @@ FVector ACustomPlayerController::GetRightDirection()
 
 void ACustomPlayerController::LookUp(float value)
 {
-	if (IsInputZero(value))
+	if (!IsInputZero(value))
 	{
 		AddPitchInput(value);
 	}
@@ -93,7 +93,7 @@ void ACustomPlayerController::LookUp(float value)
 
 void ACustomPlayerController::TurnAround(float value)
 {
-	if (IsInputZero(value))
+	if (!IsInputZero(value))
 	{
 		AddYawInput(value);
 	}
