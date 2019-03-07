@@ -5,12 +5,9 @@
 
 APlayerCharacter::APlayerCharacter()
 {
-	//Default zOffset value
-	zOffset = 0.f;
-
 	SetController();
+	SetUseControllerRotation();
 	InitCamera();
-	SetUseControllerRotation();	
 }
 
 void APlayerCharacter::SetController()
@@ -18,10 +15,11 @@ void APlayerCharacter::SetController()
 	AIControllerClass = ACustomPlayerController::StaticClass();
 }
 
-void APlayerCharacter::InitCamera()
+void APlayerCharacter::SetUseControllerRotation()
 {
-	CreateAndAttachCamera();
-	SetCameraRelativeLocation();
+	this->bUseControllerRotationPitch = true;
+	this->bUseControllerRotationYaw = true;
+	this->bUseControllerRotationRoll = true;
 }
 
 void APlayerCharacter::CreateAndAttachCamera()
@@ -40,15 +38,15 @@ void APlayerCharacter::AttachCamera()
 	cameraComponent->SetupAttachment(RootComponent);
 }
 
-void APlayerCharacter::SetCameraRelativeLocation()
+
+
+void APlayerCharacter::BeginPlay()
 {
-	FVector deltaRelativeLocation = FVector(0.f, 0.f, zOffset);
-	cameraComponent->AddRelativeLocation(deltaRelativeLocation);
+	SetCameraRelativeLocation();
 }
 
-void APlayerCharacter::SetUseControllerRotation()
+void APlayerCharacter::SetCameraRelativeLocation()
 {
-	this->bUseControllerRotationPitch = true;
-	this->bUseControllerRotationYaw = true;
-	this->bUseControllerRotationRoll = true;
+	FVector relativeLocation = FVector(0.f, 0.f, zOffset);
+	cameraComponent->SetRelativeLocation(relativeLocation);
 }

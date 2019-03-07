@@ -26,12 +26,14 @@ private:
 	float zOffset;
 
 	inline void SetController();
+	inline void SetUseControllerRotation();
 
-	inline void InitCamera();
 	inline void CreateAndAttachCamera();
 	inline void CreateCamera();
 	inline void AttachCamera();
+
+	void BeginPlay() override;
 	inline void SetCameraRelativeLocation();
 
-	inline void SetUseControllerRotation();
+	
 };
