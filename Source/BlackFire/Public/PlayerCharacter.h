@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "CustomCharacter.h"
+#include "Pistol.h"
 #include "Camera/CameraComponent.h"
 #include "PlayerCharacter.generated.h"
 

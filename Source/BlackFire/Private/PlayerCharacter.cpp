@@ -5,6 +5,7 @@
 
 APlayerCharacter::APlayerCharacter()
 {
+	weapon = NewObject<APistol>(this, FName("Temp Pistol"));
 	SetController();
 	SetUseControllerRotation();
 	CreateAndAttachCamera();
