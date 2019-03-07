@@ -3,17 +3,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Weapon.h"
+#include "WeaponActor.h"
 #include "Pistol.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class BLACKFIRE_API UPistol : public UWeapon
+class BLACKFIRE_API APistol : public AWeaponActor
 {
 	GENERATED_BODY()
 	
 public:
-	UPistol();
+	APistol();
 };

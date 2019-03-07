@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "DestroyableObject.h"
 #include "BlackFire.h"
-#include "Weapon.h"
+#include "WeaponActor.h"
 #include "GameFramework/Character.h"
 #include "CustomCharacter.generated.h"
 
@@ -25,16 +25,16 @@ public:
 
 	void Die();
 
-	TSet<UWeapon*>* GetWeaponSet();
+	TSet<AWeaponActor*>* GetWeaponSet();
 	
-	UWeapon* GetCurrentWeapon();
+	AWeaponActor* GetCurrentWeapon();
 
 protected:
 
 	float health;
 
-	UWeapon* weapon;
-	TSet<UWeapon*> weaponSet;
+	AWeaponActor* weapon;
+	TSet<AWeaponActor*> weaponSet;
 
 	ETeam team;
 

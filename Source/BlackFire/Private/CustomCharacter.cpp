@@ -29,12 +29,12 @@ void ACustomCharacter::Die()
 	UE_LOG(LogTemp, Warning, TEXT("Character is dead"));
 }
 
-TSet<UWeapon*>* ACustomCharacter::GetWeaponSet()
+TSet<AWeaponActor*>* ACustomCharacter::GetWeaponSet()
 {
 	return &weaponSet;
 }
 
-UWeapon* ACustomCharacter::GetCurrentWeapon()
+AWeaponActor* ACustomCharacter::GetCurrentWeapon()
 {
 	return weapon;
 }

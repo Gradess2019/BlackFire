@@ -3,26 +3,31 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Object.h"
+#include "Components/TimelineComponent.h"
 #include "BlackFire.h"
-#include "Weapon.generated.h"
+#include "GameFramework/Actor.h"
+#include "WeaponActor.generated.h"
 
-/**
- * 
- */
 UCLASS()
-class BLACKFIRE_API UWeapon : public UObject
+class BLACKFIRE_API AWeaponActor : public AActor
 {
 	GENERATED_BODY()
+	
+public:	
+	AWeaponActor();
 
-public:
-
+	UFUNCTION()
 	void Fire();
+
+	UFUNCTION()
 	void Reload();
 
 	void SetOwnerTeam(ETeam newTeam);
 
-private:
+	virtual void Tick(float DeltaTime) override;
+
+protected:
+	virtual void BeginPlay() override;
 
 	uint8 currentAmmo;
 	uint8 maxAmmoInMagazine;
@@ -36,4 +41,7 @@ private:
 	bool isReloading;
 
 	ETeam currentTeam;
+	
+private:
+	FTimeline timeline;
 };

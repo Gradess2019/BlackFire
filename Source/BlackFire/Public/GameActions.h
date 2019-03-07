@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Weapon.h"
+#include "WeaponActor.h"
 #include "CustomCharacter.h"
 #include "UObject/Interface.h"
 #include "GameActions.generated.h"
@@ -29,6 +29,6 @@ protected:
 	virtual void Attack() = 0;
 	virtual void Reload() = 0;
 
-	virtual void DropWeapon(UWeapon*);
+	virtual void DropWeapon(AWeaponActor*);
 
 };
