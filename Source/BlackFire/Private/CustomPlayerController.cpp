@@ -43,6 +43,9 @@ void ACustomPlayerController::SetupInputComponent()
 	InputComponent->BindAxis("MoveRight", this, &ACustomPlayerController::MoveRight);
 	InputComponent->BindAxis("LookUp", this, &ACustomPlayerController::LookUp);
 	InputComponent->BindAxis("TurnAround", this, &ACustomPlayerController::TurnAround);
+
+	InputComponent->BindAction("Attack", EInputEvent::IE_Pressed, this, &ACustomPlayerController::Attack);
+	InputComponent->BindAction("Reload", EInputEvent::IE_Pressed, this, &ACustomPlayerController::Reload);
 }
 
 void ACustomPlayerController::MoveForward(float value)
@@ -61,7 +64,8 @@ bool ACustomPlayerController::IsInputZero(float value)
 
 FVector ACustomPlayerController::GetForwardDirection()
 {
-	return UKismetMathLibrary::GetForwardVector(controlledPawn->GetActorRotation());
+	FRotator yawRotation = FRotator(0.f, controlledPawn->GetActorRotation().Yaw, 0.f);
+	return UKismetMathLibrary::GetForwardVector(yawRotation);
 }
 
 void ACustomPlayerController::Move(FVector direction, float value)
@@ -85,10 +89,18 @@ FVector ACustomPlayerController::GetRightDirection()
 
 void ACustomPlayerController::LookUp(float value)
 {
-	if (!IsInputZero(value))
+	if (!IsInputZero(value) && IsCorrectCameraPitch(value))
 	{
-		AddPitchInput(value);
+		FRotator newRotation = FRotator(playerCamera->RelativeRotation.Pitch + value, playerCamera->RelativeRotation.Yaw, 0.f);
+		playerCamera->SetRelativeRotation(newRotation);
 	}
+}
+
+bool ACustomPlayerController::IsCorrectCameraPitch(float value)
+{
+	const float newPitch = playerCamera->RelativeRotation.Pitch + value;
+	const float bound = 87.f;
+	return -bound < newPitch && newPitch < bound;
 }
 
 void ACustomPlayerController::TurnAround(float value)
