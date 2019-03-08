@@ -11,3 +11,11 @@ enum class ETeam : uint8
 	Blue,
 	Red
 };
+
+UENUM()
+enum class EShootingMode : uint8
+{
+	Single,
+	SemiAuto,
+	Auto
+};

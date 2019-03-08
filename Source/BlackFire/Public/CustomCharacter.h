@@ -9,8 +9,8 @@
 #include "GameFramework/Character.h"
 #include "CustomCharacter.generated.h"
 
-UCLASS()
-class BLACKFIRE_API ACustomCharacter : public ACharacter, public IDestroyableObject
+UCLASS(Abstract)
+class BLACKFIRE_API ACustomCharacter : public ACharacter, public IDestroyableObject, public IWeaponOwner
 {
 	GENERATED_BODY()
 
@@ -31,6 +31,10 @@ public:
 
 protected:
 
+	UPROPERTY(EditDefaultsOnly, Category = "Character configuration")
+	TSet<TSubclassOf<AWeaponActor> > weaponClassSet;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Character configuration")
 	float health;
 
 	AWeaponActor* weapon;
@@ -38,4 +42,10 @@ protected:
 
 	ETeam team;
 
+	class USceneComponent* weaponPoint;
+
+	virtual void BeginPlay() override;
+	virtual FVector GetEyesPosition() override;
+	virtual FVector GetEyesForwardVector() override;
+	virtual uint32 GetID() override;
 };

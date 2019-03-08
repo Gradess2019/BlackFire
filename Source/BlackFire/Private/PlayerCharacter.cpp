@@ -5,7 +5,6 @@
 
 APlayerCharacter::APlayerCharacter()
 {
-	weapon = NewObject<APistol>(this, FName("Temp Pistol"));
 	SetController();
 	SetUseControllerRotation();
 	CreateAndAttachCamera();
@@ -49,4 +48,14 @@ void APlayerCharacter::SetCameraRelativeLocation()
 {
 	FVector relativeLocation = FVector(0.f, 0.f, 60.f);
 	cameraComponent->SetRelativeLocation(relativeLocation);
+}
+
+FVector APlayerCharacter::GetEyesPosition()
+{
+	return cameraComponent->GetComponentLocation();
+}
+
+FVector APlayerCharacter::GetEyesForwardVector()
+{
+	return cameraComponent->GetForwardVector();
 }

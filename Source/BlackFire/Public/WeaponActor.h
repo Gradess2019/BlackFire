@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Components/TimelineComponent.h"
+#include "Components/SceneComponent.h"
+#include "WeaponOwner.h"
+#include "DestroyableObject.h"
 #include "BlackFire.h"
 #include "GameFramework/Actor.h"
 #include "WeaponActor.generated.h"
@@ -14,7 +17,14 @@ class BLACKFIRE_API AWeaponActor : public AActor
 	GENERATED_BODY()
 	
 public:	
+
 	AWeaponActor();
+
+	UFUNCTION()
+	void StartFire();
+	
+	UFUNCTION()
+	void StopFire();
 
 	UFUNCTION()
 	void Fire();
@@ -23,20 +33,66 @@ public:
 	void Reload();
 
 	void SetOwnerTeam(ETeam newTeam);
+	void SetWeaponOwner(IWeaponOwner* newOwner);
 
 protected:
 
-	uint8 currentAmmo;
-	uint8 maxAmmoInMagazine;
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon config")
+	uint16 currentAmmoInMagazine;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon config")
+	uint16 maxAmmoInMagazine;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon config")
+	uint16 currentAmmo;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon config")
 	uint16 maxAmmo;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon config")
 	float damage;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon config")
 	float reloadingTime;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon config")
 	float fireRate;
 
-	bool isFiring;
-	bool isReloading;
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon config")
+	EShootingMode mode;
 
 	ETeam currentTeam;
 
+	const FName fireTraceTag;
+
+	UTimelineComponent* fireTimeline;
+	UTimelineComponent* reloadTimeline;
+
+	IWeaponOwner* owner;
+
+private:
+	virtual void BeginPlay() override;
+
+	void InitFireTimeline();
+	void InitReloadTimeline();
+	inline void InitLineTrace();
+
+	inline bool IsValidTimelines();
+	inline bool IsTimelinesStopped();
+	inline bool CanStartFireTimeline();
+	inline bool CanStartReloadTimeline();
+
+	inline bool HasAmmoInMagazine();
+	inline bool HasSpaceInMagazine();
+	inline bool HasAmmo();
+
+	void CheckAmmoInMagazine();
+	
+	void EnableShootingMode();
+
+	FHitResult GetHit();
+	
+	UFUNCTION()
+	void FillMagazine();
+	
 };
