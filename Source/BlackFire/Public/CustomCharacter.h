@@ -9,7 +9,7 @@
 #include "GameFramework/Character.h"
 #include "CustomCharacter.generated.h"
 
-UCLASS()
+UCLASS(Abstract)
 class BLACKFIRE_API ACustomCharacter : public ACharacter, public IDestroyableObject
 {
 	GENERATED_BODY()
