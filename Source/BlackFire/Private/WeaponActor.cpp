@@ -31,7 +31,7 @@ void AWeaponActor::InitFirePoint()
 
 	if (!firePoint)
 	{
-		UE_LOG(LogTemp, Error, TEXT("firePoint component is NULL. \n %s \n %s \n %s"), __FILE__, __FUNCTION__, __LINE__);
+		UE_LOG(LogTemp, Error, TEXT("firePoint component is NULL.\n File: %s \n Function: %s \n Line: %d"), *FString(__FILE__), *FString(__FUNCTION__), __LINE__);
 	}
 }
 
