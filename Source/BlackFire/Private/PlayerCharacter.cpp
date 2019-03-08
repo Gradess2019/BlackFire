@@ -49,16 +49,3 @@ void APlayerCharacter::SetCameraRelativeLocation()
 	FVector relativeLocation = FVector(0.f, 0.f, 60.f);
 	cameraComponent->SetRelativeLocation(relativeLocation);
 }
-
-void APlayerCharacter::BeginPlay()
-{
-	Super::BeginPlay();
-
-	if (weaponSet.Num() > 0)
-	{
-		weapon = (weaponSet.Array())[0];
-	} else
-	{
-		weapon = GetWorld()->SpawnActor<APistol>(APistol::StaticClass(), GetActorTransform());
-	}
-}

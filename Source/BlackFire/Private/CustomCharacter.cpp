@@ -51,4 +51,12 @@ void ACustomCharacter::BeginPlay()
 		AWeaponActor* newWeapon = GetWorld()->SpawnActor<AWeaponActor>(weaponClass, GetActorTransform(), weaponSpawnParameters);
 		weaponSet.Add(newWeapon);
 	}
-}
+
+	if (weaponSet.Num() > 0)
+	{
+		weapon = (weaponSet.Array())[0];
+	} else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("weaponSet is empty. Create default weapon.\n File: %s \n Function: %s \n Line: %d"), *FString(__FILE__), *FString(__FUNCTION__), __LINE__);
+		weapon = GetWorld()->SpawnActor<AWeaponActor>(AWeaponActor::StaticClass(), GetActorTransform());
+	}

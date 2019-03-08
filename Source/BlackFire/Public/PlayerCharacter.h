@@ -34,7 +34,6 @@ private:
 	inline void AttachCamera();
 
 	void OnConstruction(const FTransform&) override;
-	void BeginPlay() override;
 	inline void SetCameraRelativeLocation();
 
 	
