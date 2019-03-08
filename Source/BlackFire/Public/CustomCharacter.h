@@ -10,7 +10,7 @@
 #include "CustomCharacter.generated.h"
 
 UCLASS(Abstract)
-class BLACKFIRE_API ACustomCharacter : public ACharacter, public IDestroyableObject
+class BLACKFIRE_API ACustomCharacter : public ACharacter, public IDestroyableObject, public IWeaponOwner
 {
 	GENERATED_BODY()
 
@@ -44,4 +44,7 @@ protected:
 	class USceneComponent* weaponPoint;
 
 	virtual void BeginPlay() override;
+	virtual FVector GetEyesPosition() override;
+	virtual FVector GetEyesForwardVector() override;
+	virtual uint32 GetID() override;
 };

@@ -58,6 +58,7 @@ void ACustomCharacter::BeginPlay()
 		weaponSpawnParameters.Owner = this;
 		weaponSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 		AWeaponActor* newWeapon = GetWorld()->SpawnActor<AWeaponActor>(weaponClass, GetActorTransform(), weaponSpawnParameters);
+		newWeapon->SetOwner(this);
 		weaponSet.Add(newWeapon);
 	}
 
@@ -78,4 +79,19 @@ void ACustomCharacter::BeginPlay()
 		UE_LOG(LogTemp, Error, TEXT("weaponPoint component is NULL.\n File: %s \n Function: %s \n Line: %d"), *FString(__FILE__), *FString(__FUNCTION__), __LINE__);
 	}
 	
+}
+
+FVector ACustomCharacter::GetEyesPosition()
+{
+	return FVector::ZeroVector;
+}
+
+FVector ACustomCharacter::GetEyesForwardVector()
+{
+	return FVector::ZeroVector;
+}
+
+uint32 ACustomCharacter::GetID()
+{
+	return GetUniqueID();
 }

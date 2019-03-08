@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "WeaponActor.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "Kismet/KismetMathLibrary.h"
 
 #define DestroyableObjectTrace ECC_GameTraceChannel1
 
@@ -18,8 +20,6 @@ void AWeaponActor::BeginPlay()
 	InitFirePoint();
 	InitLineTrace();
 }
-
-
 
 void AWeaponActor::InitFireTimeline()
 {
@@ -52,23 +52,6 @@ void AWeaponActor::InitReloadTimeline()
 	reloadTimeline->SetTimelineFinishedFunc(fillMagazineEvent);
 
 	reloadTimeline->RegisterComponent();
-}
-
-void AWeaponActor::InitFirePoint()
-{
-	TSet<class UActorComponent*> components = GetComponents();
-	for (UActorComponent* component : components)
-	{
-		if (component->IsA(UFirePoint::StaticClass()))
-		{
-			firePoint = Cast<USceneComponent>(component);
-		}
-	}
-
-	if (!firePoint)
-	{
-		UE_LOG(LogTemp, Error, TEXT("firePoint component is NULL.\n File: %s \n Function: %s \n Line: %d"), *FString(__FILE__), *FString(__FUNCTION__), __LINE__);
-	}
 }
 
 void AWeaponActor::InitLineTrace()
@@ -137,23 +120,8 @@ void AWeaponActor::StopFire()
 
 void AWeaponActor::Fire()
 {
-	FHitResult hit = FHitResult(EForceInit::ForceInit);
-
-	FVector start = firePoint->GetComponentLocation();
-	FVector end = firePoint->GetComponentRotation().Vector() * 10000;
-
-	FCollisionObjectQueryParams collisionObjectParams(DestroyableObjectTrace);
-	FCollisionQueryParams collisionParams;
-	collisionParams.bTraceComplex = true;
-	collisionParams.TraceTag = fireTraceTag;
-
-	GetWorld()->LineTraceSingleByObjectType(
-		hit, 
-		start, 
-		end, 
-		collisionObjectParams, 
-		collisionParams
-	);
+	FHitResult hit = GetHit();
+	AActor* hitActor = hit.GetActor();
 
 	currentAmmoInMagazine--;
 	UE_LOG(LogTemp, Warning, TEXT("Current ammo in magazine: %d"), currentAmmoInMagazine);
@@ -165,6 +133,29 @@ void AWeaponActor::Fire()
 			reloadTimeline->PlayFromStart();
 		}
 	}
+}
+
+FHitResult AWeaponActor::GetHit()
+{
+	FHitResult hit = FHitResult(EForceInit::ForceInit);
+
+	FVector start = owner->GetEyesPosition();
+	FVector end = owner->GetEyesForwardVector() * 100000.f;
+
+	FCollisionObjectQueryParams collisionObjectParams(DestroyableObjectTrace);
+	FCollisionQueryParams collisionParams;
+	collisionParams.bTraceComplex = true;
+	collisionParams.TraceTag = fireTraceTag;
+	collisionParams.AddIgnoredActor(owner->GetID());
+	bool isHitted = GetWorld()->LineTraceSingleByObjectType(
+		hit,
+		start,
+		end + owner->GetEyesPosition(),
+		collisionObjectParams,
+		collisionParams
+	);
+
+	return hit;
 }
 
 void AWeaponActor::Reload()
@@ -193,6 +184,11 @@ bool AWeaponActor::HasAmmo()
 void AWeaponActor::SetOwnerTeam(ETeam newTeam)
 {
 	currentTeam = newTeam;
+}
+
+void AWeaponActor::SetOwner(IWeaponOwner* newOwner)
+{
+	owner = newOwner;
 }
 
 void AWeaponActor::FillMagazine()

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "CustomCharacter.h"
 #include "Pistol.h"
+#include "WeaponOwner.h"
 #include "Camera/CameraComponent.h"
 #include "PlayerCharacter.generated.h"
 
@@ -36,5 +37,6 @@ private:
 	void OnConstruction(const FTransform&) override;
 	inline void SetCameraRelativeLocation();
 
-	
+	FVector GetEyesPosition() override;
+	FVector GetEyesForwardVector() override;
 };

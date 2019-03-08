@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/TimelineComponent.h"
 #include "Components/SceneComponent.h"
+#include "WeaponOwner.h"
 #include "FirePoint.h"
 #include "BlackFire.h"
 #include "GameFramework/Actor.h"
@@ -32,6 +33,7 @@ public:
 	void Reload();
 
 	void SetOwnerTeam(ETeam newTeam);
+	void SetOwner(IWeaponOwner* newOwner);
 
 protected:
 
@@ -63,17 +65,16 @@ protected:
 
 	const FName fireTraceTag;
 
-	USceneComponent* firePoint;
-
 	UTimelineComponent* fireTimeline;
 	UTimelineComponent* reloadTimeline;
+
+	IWeaponOwner* owner;
 
 private:
 	virtual void BeginPlay() override;
 
 	void InitFireTimeline();
 	void InitReloadTimeline();
-	void InitFirePoint();
 	inline void InitLineTrace();
 
 	inline bool IsValidTimelines();
@@ -87,6 +88,8 @@ private:
 	
 	void EnableShootingMode();
 
+	FHitResult GetHit();
+	
 	UFUNCTION()
 	void FillMagazine();
 	
