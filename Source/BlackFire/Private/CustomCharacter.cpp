@@ -16,7 +16,7 @@ void ACustomCharacter::TakeDamage(float damage)
 	{
 		Die();
 	}
-	UE_LOG(LogTemp, Warning, TEXT("Taked damage %d. Current health %d"), damage, health);
+	UE_LOG(LogTemp, Warning, TEXT("Taked damage %f. Current health %f"), damage, health);
 }
 
 void ACustomCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
