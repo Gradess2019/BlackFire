@@ -41,5 +41,7 @@ protected:
 
 	ETeam team;
 
+	class USceneComponent* weaponPoint;
+
 	virtual void BeginPlay() override;
 };

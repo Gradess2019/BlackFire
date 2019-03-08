@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "CustomCharacter.h"
+#include "WeaponPoint.h"
 
 ACustomCharacter::ACustomCharacter()
 {
@@ -18,7 +19,6 @@ void ACustomCharacter::TakeDamage(float damage)
 	UE_LOG(LogTemp, Warning, TEXT("Taked damage %d. Current health %d"), damage, health);
 }
 
-// Called to bind functionality to input
 void ACustomCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -43,6 +43,15 @@ void ACustomCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	TSet<class UActorComponent*> components = GetComponents();
+	for (UActorComponent* component : components)
+	{
+		if (component->IsA(UWeaponPoint::StaticClass()))
+		{
+			weaponPoint = Cast<USceneComponent>(component);
+		}
+	}
+
 	for (TSubclassOf<AWeaponActor> weaponClass : weaponClassSet)
 	{
 		FActorSpawnParameters weaponSpawnParameters;
@@ -60,3 +69,13 @@ void ACustomCharacter::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("weaponSet is empty. Create default weapon.\n File: %s \n Function: %s \n Line: %d"), *FString(__FILE__), *FString(__FUNCTION__), __LINE__);
 		weapon = GetWorld()->SpawnActor<AWeaponActor>(AWeaponActor::StaticClass(), GetActorTransform());
 	}
+
+	if (weaponPoint)
+	{
+		weapon->AttachToComponent(weaponPoint, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	} else
+	{
+		UE_LOG(LogTemp, Error, TEXT("weaponPoint component is NULL.\n File: %s \n Function: %s \n Line: %d"), *FString(__FILE__), *FString(__FUNCTION__), __LINE__);
+	}
+	
+}
