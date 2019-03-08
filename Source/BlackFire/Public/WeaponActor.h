@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Components/TimelineComponent.h"
+#include "Components/SceneComponent.h"
+#include "FirePoint.h"
 #include "BlackFire.h"
 #include "GameFramework/Actor.h"
 #include "WeaponActor.generated.h"
@@ -59,6 +61,8 @@ protected:
 
 	ETeam currentTeam;
 
+	USceneComponent* firePoint;
+
 	UTimelineComponent* fireTimeline;
 	UTimelineComponent* reloadTimeline;
 
@@ -67,6 +71,7 @@ private:
 
 	void InitFireTimeline();
 	void InitReloadTimeline();
+	void InitFirePoint();
 
 	inline bool IsValidTimelines();
 	inline bool IsTimelinesStopped();

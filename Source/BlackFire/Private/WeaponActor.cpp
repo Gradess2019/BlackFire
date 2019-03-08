@@ -2,6 +2,8 @@
 
 #include "WeaponActor.h"
 
+#define DestroyableObjectTrace ECC_GameTraceChannel1
+
 AWeaponActor::AWeaponActor()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -13,9 +15,23 @@ void AWeaponActor::BeginPlay()
 
 	InitFireTimeline();
 	InitReloadTimeline();
-	if (IsValidTimelines())
+	InitFirePoint();
+}
+
+void AWeaponActor::InitFirePoint()
+{
+	TSet<class UActorComponent*> components = GetComponents();
+	for (UActorComponent* component : components)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("FUCKFUCKFUCK"));
+		if (component->IsA(UFirePoint::StaticClass()))
+		{
+			firePoint = Cast<USceneComponent>(component);
+		}
+	}
+
+	if (!firePoint)
+	{
+		UE_LOG(LogTemp, Error, TEXT("firePoint component is NULL. \n %s \n %s \n %s"), __FILE__, __FUNCTION__, __LINE__);
 	}
 }
 
@@ -113,6 +129,23 @@ void AWeaponActor::StopFire()
 
 void AWeaponActor::Fire()
 {
+	FHitResult hit = FHitResult(EForceInit::ForceInit);
+
+	FVector start = firePoint->GetComponentLocation();
+	FVector end = firePoint->GetComponentRotation().Vector() * 10000;
+
+	FCollisionObjectQueryParams collisionObjectParams(DestroyableObjectTrace);
+	FCollisionQueryParams collisionParams;
+	collisionParams.bTraceComplex = true;
+
+	GetWorld()->LineTraceSingleByObjectType(
+		hit, 
+		start, 
+		end, 
+		collisionObjectParams, 
+		collisionParams
+	);
+
 	currentAmmoInMagazine--;
 	UE_LOG(LogTemp, Warning, TEXT("Current ammo in magazine: %d"), currentAmmoInMagazine);
 	if (!HasAmmoInMagazine())
