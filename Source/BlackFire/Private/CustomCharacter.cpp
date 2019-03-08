@@ -39,3 +39,16 @@ AWeaponActor* ACustomCharacter::GetCurrentWeapon()
 	return weapon;
 }
 
+void ACustomCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	for (TSubclassOf<AWeaponActor> weaponClass : weaponClassSet)
+	{
+		FActorSpawnParameters weaponSpawnParameters;
+		weaponSpawnParameters.Owner = this;
+		weaponSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		AWeaponActor* newWeapon = GetWorld()->SpawnActor<AWeaponActor>(weaponClass, GetActorTransform(), weaponSpawnParameters);
+		weaponSet.Add(newWeapon);
+	}
+}

@@ -53,5 +53,12 @@ void APlayerCharacter::SetCameraRelativeLocation()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	weapon = GetWorld()->SpawnActor<APistol>(APistol::StaticClass(), GetActorTransform());
+
+	if (weaponSet.Num() > 0)
+	{
+		weapon = (weaponSet.Array())[0];
+	} else
+	{
+		weapon = GetWorld()->SpawnActor<APistol>(APistol::StaticClass(), GetActorTransform());
+	}
 }

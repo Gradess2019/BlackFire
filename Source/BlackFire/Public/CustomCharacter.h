@@ -31,6 +31,9 @@ public:
 
 protected:
 
+	UPROPERTY(EditDefaultsOnly, Category = "Character configuration")
+	TSet<TSubclassOf<AWeaponActor> > weaponClassSet;
+
 	float health;
 
 	AWeaponActor* weapon;
@@ -38,4 +41,5 @@ protected:
 
 	ETeam team;
 
+	virtual void BeginPlay() override;
 };
