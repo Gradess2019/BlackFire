@@ -34,6 +34,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Character configuration")
 	TSet<TSubclassOf<AWeaponActor> > weaponClassSet;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Character configuration")
 	float health;
 
 	AWeaponActor* weapon;

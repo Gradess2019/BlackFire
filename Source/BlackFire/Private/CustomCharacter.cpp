@@ -58,7 +58,7 @@ void ACustomCharacter::BeginPlay()
 		weaponSpawnParameters.Owner = this;
 		weaponSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 		AWeaponActor* newWeapon = GetWorld()->SpawnActor<AWeaponActor>(weaponClass, GetActorTransform(), weaponSpawnParameters);
-		newWeapon->SetOwner(this);
+		newWeapon->SetWeaponOwner(this);
 		weaponSet.Add(newWeapon);
 	}
 

@@ -17,7 +17,6 @@ void AWeaponActor::BeginPlay()
 
 	InitFireTimeline();
 	InitReloadTimeline();
-	InitFirePoint();
 	InitLineTrace();
 }
 
@@ -121,18 +120,16 @@ void AWeaponActor::StopFire()
 void AWeaponActor::Fire()
 {
 	FHitResult hit = GetHit();
-	AActor* hitActor = hit.GetActor();
+	IDestroyableObject* hitObject = Cast<IDestroyableObject>(hit.GetActor());
+
+	if (hitObject)
+	{
+		hitObject->TakeDamage(damage);
+	}
 
 	currentAmmoInMagazine--;
 	UE_LOG(LogTemp, Warning, TEXT("Current ammo in magazine: %d"), currentAmmoInMagazine);
-	if (!HasAmmoInMagazine())
-	{
-		fireTimeline->Stop();
-		if (CanStartReloadTimeline())
-		{
-			reloadTimeline->PlayFromStart();
-		}
-	}
+	CheckAmmoInMagazine();
 }
 
 FHitResult AWeaponActor::GetHit()
@@ -181,12 +178,24 @@ bool AWeaponActor::HasAmmo()
 	return currentAmmo > 0;
 }
 
+void AWeaponActor::CheckAmmoInMagazine()
+{
+	if (!HasAmmoInMagazine())
+	{
+		fireTimeline->Stop();
+		if (CanStartReloadTimeline())
+		{
+			reloadTimeline->PlayFromStart();
+		}
+	}
+}
+
 void AWeaponActor::SetOwnerTeam(ETeam newTeam)
 {
 	currentTeam = newTeam;
 }
 
-void AWeaponActor::SetOwner(IWeaponOwner* newOwner)
+void AWeaponActor::SetWeaponOwner(IWeaponOwner* newOwner)
 {
 	owner = newOwner;
 }

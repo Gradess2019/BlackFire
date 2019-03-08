@@ -6,7 +6,7 @@
 #include "Components/TimelineComponent.h"
 #include "Components/SceneComponent.h"
 #include "WeaponOwner.h"
-#include "FirePoint.h"
+#include "DestroyableObject.h"
 #include "BlackFire.h"
 #include "GameFramework/Actor.h"
 #include "WeaponActor.generated.h"
@@ -33,7 +33,7 @@ public:
 	void Reload();
 
 	void SetOwnerTeam(ETeam newTeam);
-	void SetOwner(IWeaponOwner* newOwner);
+	void SetWeaponOwner(IWeaponOwner* newOwner);
 
 protected:
 
@@ -85,6 +85,8 @@ private:
 	inline bool HasAmmoInMagazine();
 	inline bool HasSpaceInMagazine();
 	inline bool HasAmmo();
+
+	void CheckAmmoInMagazine();
 	
 	void EnableShootingMode();
 
