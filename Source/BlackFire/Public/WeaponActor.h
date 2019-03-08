@@ -61,6 +61,8 @@ protected:
 
 	ETeam currentTeam;
 
+	const FName fireTraceTag;
+
 	USceneComponent* firePoint;
 
 	UTimelineComponent* fireTimeline;
@@ -72,6 +74,7 @@ private:
 	void InitFireTimeline();
 	void InitReloadTimeline();
 	void InitFirePoint();
+	inline void InitLineTrace();
 
 	inline bool IsValidTimelines();
 	inline bool IsTimelinesStopped();

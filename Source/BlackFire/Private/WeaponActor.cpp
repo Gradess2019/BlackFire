@@ -4,7 +4,7 @@
 
 #define DestroyableObjectTrace ECC_GameTraceChannel1
 
-AWeaponActor::AWeaponActor()
+AWeaponActor::AWeaponActor() : fireTraceTag(FName("FireTraceTag"))
 {
 	PrimaryActorTick.bCanEverTick = true;
 }
@@ -16,24 +16,10 @@ void AWeaponActor::BeginPlay()
 	InitFireTimeline();
 	InitReloadTimeline();
 	InitFirePoint();
+	InitLineTrace();
 }
 
-void AWeaponActor::InitFirePoint()
-{
-	TSet<class UActorComponent*> components = GetComponents();
-	for (UActorComponent* component : components)
-	{
-		if (component->IsA(UFirePoint::StaticClass()))
-		{
-			firePoint = Cast<USceneComponent>(component);
-		}
-	}
 
-	if (!firePoint)
-	{
-		UE_LOG(LogTemp, Error, TEXT("firePoint component is NULL.\n File: %s \n Function: %s \n Line: %d"), *FString(__FILE__), *FString(__FUNCTION__), __LINE__);
-	}
-}
 
 void AWeaponActor::InitFireTimeline()
 {
@@ -66,6 +52,28 @@ void AWeaponActor::InitReloadTimeline()
 	reloadTimeline->SetTimelineFinishedFunc(fillMagazineEvent);
 
 	reloadTimeline->RegisterComponent();
+}
+
+void AWeaponActor::InitFirePoint()
+{
+	TSet<class UActorComponent*> components = GetComponents();
+	for (UActorComponent* component : components)
+	{
+		if (component->IsA(UFirePoint::StaticClass()))
+		{
+			firePoint = Cast<USceneComponent>(component);
+		}
+	}
+
+	if (!firePoint)
+	{
+		UE_LOG(LogTemp, Error, TEXT("firePoint component is NULL.\n File: %s \n Function: %s \n Line: %d"), *FString(__FILE__), *FString(__FUNCTION__), __LINE__);
+	}
+}
+
+void AWeaponActor::InitLineTrace()
+{
+	GetWorld()->DebugDrawTraceTag = fireTraceTag;
 }
 
 void AWeaponActor::StartFire()
@@ -137,6 +145,7 @@ void AWeaponActor::Fire()
 	FCollisionObjectQueryParams collisionObjectParams(DestroyableObjectTrace);
 	FCollisionQueryParams collisionParams;
 	collisionParams.bTraceComplex = true;
+	collisionParams.TraceTag = fireTraceTag;
 
 	GetWorld()->LineTraceSingleByObjectType(
 		hit, 
