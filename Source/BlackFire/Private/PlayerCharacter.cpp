@@ -74,3 +74,50 @@ FWeaponData APlayerCharacter::GetWeaponData()
 {
 	return weapon->GetData();
 }
+
+void APlayerCharacter::NextWeapon()
+{
+
+	TArray<AWeaponActor*> weaponArray = weaponSet.Array();
+	int32 currentWeaponID = 0;
+
+	if (weaponArray.Num() > 1 && weaponArray.Find(weapon, currentWeaponID))
+	{
+		int32 newWeaponID = currentWeaponID + 1;
+		if (weaponArray.IsValidIndex(newWeaponID))
+		{
+			weapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+			weapon->SetActorHiddenInGame(true);
+
+			weapon = weaponArray[newWeaponID];
+		} else
+		{
+			weapon = weaponArray[0];
+		}
+
+		AttachWeaponActor();
+	}
+}
+
+void APlayerCharacter::PreviousWeapon()
+{
+	TArray<AWeaponActor*> weaponArray = weaponSet.Array();
+	int32 currentWeaponID = 0;
+
+	if (weaponArray.Num() > 1 && weaponArray.Find(weapon, currentWeaponID))
+	{
+		int32 newWeaponID = currentWeaponID - 1;
+		if (weaponArray.IsValidIndex(newWeaponID))
+		{
+			weapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+			weapon->SetActorHiddenInGame(true);
+
+			weapon = weaponArray[newWeaponID];
+		} else
+		{
+			weapon = weaponArray[weaponArray.Num() - 1];
+		}
+
+		AttachWeaponActor();
+	}
+}

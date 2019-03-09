@@ -23,6 +23,9 @@ class BLACKFIRE_API APlayerCharacter : public ACustomCharacter, public IPlayerSu
 public:
 	APlayerCharacter();
 
+	void NextWeapon();
+	void PreviousWeapon();
+
 private:
 
 	UCameraComponent* cameraComponent;
