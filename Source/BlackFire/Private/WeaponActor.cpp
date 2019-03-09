@@ -181,6 +181,14 @@ bool AWeaponActor::HasAmmo()
 	return data.currentAmmo > 0;
 }
 
+void AWeaponActor::StopReload()
+{
+	if (IsValidTimelines() && reloadTimeline->IsPlaying())
+	{
+		reloadTimeline->Stop();
+	}
+}
+
 void AWeaponActor::CheckAmmoInMagazine()
 {
 	if (!HasAmmoInMagazine())
