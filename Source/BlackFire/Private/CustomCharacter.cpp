@@ -69,16 +69,22 @@ void ACustomCharacter::BeginPlay()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("weaponSet is empty. Create default weapon.\n File: %s \n Function: %s \n Line: %d"), *FString(__FILE__), *FString(__FUNCTION__), __LINE__);
 		weapon = GetWorld()->SpawnActor<AWeaponActor>(AWeaponActor::StaticClass(), GetActorTransform());
+		weaponSet.Add(weapon);
 	}
 
 	if (weaponPoint)
 	{
-		weapon->AttachToComponent(weaponPoint, FAttachmentTransformRules::SnapToTargetIncludingScale);
+		AttachWeaponActor();
 	} else
 	{
 		UE_LOG(LogTemp, Error, TEXT("weaponPoint component is NULL.\n File: %s \n Function: %s \n Line: %d"), *FString(__FILE__), *FString(__FUNCTION__), __LINE__);
 	}
 	
+}
+
+void ACustomCharacter::AttachWeaponActor()
+{
+	weapon->AttachToComponent(weaponPoint, FAttachmentTransformRules::SnapToTargetIncludingScale);
 }
 
 FVector ACustomCharacter::GetEyesPosition()
