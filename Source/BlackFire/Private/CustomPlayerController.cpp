@@ -53,6 +53,7 @@ void ACustomPlayerController::SetupInputComponent()
 
 	InputComponent->BindAction("PreviousWeapon", EInputEvent::IE_Pressed, this, &ACustomPlayerController::PreviousWeapon);
 	InputComponent->BindAction("NextWeapon", EInputEvent::IE_Released, this, &ACustomPlayerController::NextWeapon);
+	InputComponent->BindAction("Jump", EInputEvent::IE_Released, this, &ACustomPlayerController::Jump);
 	InputComponent->BindAction("Attack", EInputEvent::IE_Pressed, this, &ACustomPlayerController::StartAttack);
 	InputComponent->BindAction("Attack", EInputEvent::IE_Released, this, &ACustomPlayerController::StopAttack);
 	InputComponent->BindAction("Reload", EInputEvent::IE_Pressed, this, &ACustomPlayerController::Reload);
@@ -134,6 +135,11 @@ APlayerCharacter* ACustomPlayerController::GetControlledPlayer()
 void ACustomPlayerController::PreviousWeapon()
 {
 	GetControlledPlayer()->PreviousWeapon();
+}
+
+void ACustomPlayerController::Jump()
+{
+	GetControlledPlayer()->Jump();
 }
 
 void ACustomPlayerController::StartAttack()

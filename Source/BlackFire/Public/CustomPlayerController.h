@@ -46,6 +46,7 @@ private:
 
 	inline void NextWeapon();
 	inline void PreviousWeapon();
+	inline void Jump();
 	inline APlayerCharacter* GetControlledPlayer();
 
 
