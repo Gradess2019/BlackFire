@@ -8,7 +8,6 @@
 #include "WeaponOwner.h"
 #include "DestroyableObject.h"
 #include "BlackFire.h"
-#include "PlayerSubject.h"
 #include "GameFramework/Actor.h"
 #include "WeaponActor.generated.h"
 
