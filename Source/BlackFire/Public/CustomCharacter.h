@@ -48,4 +48,6 @@ protected:
 	virtual FVector GetEyesPosition() override;
 	virtual FVector GetEyesForwardVector() override;
 	virtual uint32 GetID() override;
+	virtual void FireEvent() override;
+	virtual void ReloadEvent() override;
 };

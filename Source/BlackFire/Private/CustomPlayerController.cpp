@@ -1,12 +1,28 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "CustomPlayerController.h"
+#include "GUI.h"
+
+ACustomPlayerController::ACustomPlayerController()
+{
+	this->bAttachToPawn = true;
+}
 
 void ACustomPlayerController::BeginPlay()
 {
+	Super::BeginPlay();
+
 	InitControlledPawn();
 	InitCamera();
-	this->bAttachToPawn = true;
+
+	APlayerCharacter* player = Cast<APlayerCharacter>(controlledPawn);
+
+	UGUI* gui = CreateWidget<UGUI>(this, GUIClass);
+	if (gui)
+	{
+		gui->AddToViewport();
+		player->AttachObserver((IPlayerObserver*)gui);
+	}
 }
 
 void ACustomPlayerController::InitControlledPawn()

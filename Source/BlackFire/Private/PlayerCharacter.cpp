@@ -60,6 +60,16 @@ FVector APlayerCharacter::GetEyesForwardVector()
 	return cameraComponent->GetForwardVector();
 }
 
+void APlayerCharacter::FireEvent()
+{
+	Notify();
+}
+
+void APlayerCharacter::ReloadEvent()
+{
+	Notify();
+}
+
 FWeaponData APlayerCharacter::GetWeaponData()
 {
 	return weapon->GetData();

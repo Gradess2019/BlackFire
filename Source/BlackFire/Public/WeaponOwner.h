@@ -22,4 +22,6 @@ public:
 	virtual FVector GetEyesPosition() = 0;
 	virtual FVector GetEyesForwardVector() = 0;
 	virtual uint32 GetID() = 0;
+	virtual void FireEvent() = 0;
+	virtual void ReloadEvent() = 0;
 };

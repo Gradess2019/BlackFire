@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "CustomCharacter.h"
 #include "Pistol.h"
+#include "GUI.h"
 #include "WeaponOwner.h"
 #include "PlayerSubject.h"
 #include "Camera/CameraComponent.h"
@@ -23,10 +24,8 @@ public:
 	APlayerCharacter();
 
 private:
+
 	UCameraComponent* cameraComponent;
-	
-	UPROPERTY(EditDefaultsOnly, Category = "Character configuration")
-	float zOffset;
 
 	inline void SetController();
 	inline void SetUseControllerRotation();
@@ -40,6 +39,9 @@ private:
 
 	FVector GetEyesPosition() override;
 	FVector GetEyesForwardVector() override;
+	void FireEvent() override;
+	void ReloadEvent() override;
 
 	virtual FWeaponData GetWeaponData() override;
+
 };

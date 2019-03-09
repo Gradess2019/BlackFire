@@ -13,12 +13,18 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class BLACKFIRE_API ACustomPlayerController : public APlayerController, public IGameActions
 {
 	GENERATED_BODY()
-	
+public:
+	ACustomPlayerController();
+
 private:
+
+	UPROPERTY(EditDefaultsOnly, Category = "Character configuration")
+	TSubclassOf<UGUI> GUIClass;
+
 	UCameraComponent* playerCamera;
 
 	UFUNCTION()

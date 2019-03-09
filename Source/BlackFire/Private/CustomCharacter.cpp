@@ -95,3 +95,13 @@ uint32 ACustomCharacter::GetID()
 {
 	return GetUniqueID();
 }
+
+void ACustomCharacter::FireEvent()
+{
+	UE_LOG(LogTemp, Log, TEXT("FireEvent"));
+}
+
+void ACustomCharacter::ReloadEvent()
+{
+	UE_LOG(LogTemp, Log, TEXT("ReloadEvent"));
+}

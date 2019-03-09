@@ -62,7 +62,7 @@ void AWeaponActor::StartFire()
 {
 	if (CanStartFireTimeline())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Weapon info: Damage %f, current ammo %d, max ammo %d, max ammo in magazine %d, reloading time %f, fire rate %f"), data.damage, data.currentAmmo, data.maxAmmo, data.maxAmmoInMagazine, data.reloadingTime, data.fireRate);
+		//UE_LOG(LogTemp, Warning, TEXT("Weapon info: Damage %f, current ammo %d, max ammo %d, max ammo in magazine %d, reloading time %f, fire rate %f"), data.damage, data.currentAmmo, data.maxAmmo, data.maxAmmoInMagazine, data.reloadingTime, data.fireRate);
 
 		EnableShootingMode();
 		fireTimeline->PlayFromStart();
@@ -128,7 +128,7 @@ void AWeaponActor::Fire()
 	}
 
 	data.currentAmmoInMagazine--;
-	UE_LOG(LogTemp, Warning, TEXT("Current ammo in magazine: %d"), data.currentAmmoInMagazine);
+	owner->FireEvent();
 	CheckAmmoInMagazine();
 }
 
@@ -215,7 +215,7 @@ void AWeaponActor::FillMagazine()
 		}
 		data.currentAmmoInMagazine += freeSpace;
 	}
-	
+	owner->ReloadEvent();
 }
 
 FWeaponData AWeaponActor::GetData()
