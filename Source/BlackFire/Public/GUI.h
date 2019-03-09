@@ -1,0 +1,20 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "PlayerObserver.h"
+#include "Blueprint/UserWidget.h"
+#include "GUI.generated.h"
+
+/**
+ * 
+ */
+UCLASS()
+class BLACKFIRE_API UGUI : public UUserWidget, public IPlayerObserver
+{
+	GENERATED_BODY()
+	
+public:
+	void Update(class IPlayerSubject* subject) override;
+};
