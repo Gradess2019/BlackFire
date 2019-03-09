@@ -99,6 +99,7 @@ void APlayerCharacter::SetWeapon(int32 id)
 {
 	weapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 	weapon->SetActorHiddenInGame(true);
+	weapon->StopReload();
 
 	weapon = GetWeaponById(id);
 	weapon->SetActorHiddenInGame(false);

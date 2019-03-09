@@ -32,6 +32,8 @@ public:
 	UFUNCTION()
 	void Reload();
 
+	void StopReload();
+
 	void SetOwnerTeam(ETeam newTeam);
 	void SetWeaponOwner(IWeaponOwner* newOwner);
 

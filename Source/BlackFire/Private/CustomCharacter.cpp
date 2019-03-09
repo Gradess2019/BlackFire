@@ -59,6 +59,7 @@ void ACustomCharacter::BeginPlay()
 		weaponSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 		AWeaponActor* newWeapon = GetWorld()->SpawnActor<AWeaponActor>(weaponClass, GetActorTransform(), weaponSpawnParameters);
 		newWeapon->SetWeaponOwner(this);
+		newWeapon->SetActorHiddenInGame(true);
 		weaponSet.Add(newWeapon);
 	}
 
@@ -74,6 +75,7 @@ void ACustomCharacter::BeginPlay()
 
 	if (weaponPoint)
 	{
+		weapon->SetActorHiddenInGame(false);
 		AttachWeaponActor();
 	} else
 	{
