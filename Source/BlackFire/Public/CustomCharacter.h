@@ -50,4 +50,6 @@ protected:
 	virtual uint32 GetID() override;
 	virtual void FireEvent() override;
 	virtual void ReloadEvent() override;
+	
+	void AttachWeaponActor();
 };

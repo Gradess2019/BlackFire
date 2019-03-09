@@ -44,6 +44,11 @@ private:
 	bool IsInputZero(float value);
 	bool IsCorrectCameraPitch(float value);
 
+	inline void NextWeapon();
+	inline void PreviousWeapon();
+	inline APlayerCharacter* GetControlledPlayer();
+
+
 	inline void Move(FVector direction, float value);
 
 	inline FVector GetRightDirection();

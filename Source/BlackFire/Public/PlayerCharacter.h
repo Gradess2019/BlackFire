@@ -23,6 +23,9 @@ class BLACKFIRE_API APlayerCharacter : public ACustomCharacter, public IPlayerSu
 public:
 	APlayerCharacter();
 
+	void NextWeapon();
+	void PreviousWeapon();
+
 private:
 
 	UCameraComponent* cameraComponent;
@@ -43,5 +46,8 @@ private:
 	void ReloadEvent() override;
 
 	virtual FWeaponData GetWeaponData() override;
+
+	void SetWeapon(int32 id);
+	AWeaponActor* GetWeaponById(int32 id);
 
 };

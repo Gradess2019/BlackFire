@@ -51,6 +51,8 @@ void ACustomPlayerController::SetupInputComponent()
 	InputComponent->BindAxis("LookUp", this, &ACustomPlayerController::LookUp);
 	InputComponent->BindAxis("TurnAround", this, &ACustomPlayerController::TurnAround);
 
+	InputComponent->BindAction("PreviousWeapon", EInputEvent::IE_Pressed, this, &ACustomPlayerController::PreviousWeapon);
+	InputComponent->BindAction("NextWeapon", EInputEvent::IE_Released, this, &ACustomPlayerController::NextWeapon);
 	InputComponent->BindAction("Attack", EInputEvent::IE_Pressed, this, &ACustomPlayerController::StartAttack);
 	InputComponent->BindAction("Attack", EInputEvent::IE_Released, this, &ACustomPlayerController::StopAttack);
 	InputComponent->BindAction("Reload", EInputEvent::IE_Pressed, this, &ACustomPlayerController::Reload);
@@ -117,6 +119,21 @@ void ACustomPlayerController::TurnAround(float value)
 	{
 		AddYawInput(value);
 	}
+}
+
+void ACustomPlayerController::NextWeapon()
+{
+	GetControlledPlayer()->NextWeapon();
+}
+
+APlayerCharacter* ACustomPlayerController::GetControlledPlayer()
+{
+	return Cast<APlayerCharacter>(controlledPawn);
+}
+
+void ACustomPlayerController::PreviousWeapon()
+{
+	GetControlledPlayer()->PreviousWeapon();
 }
 
 void ACustomPlayerController::StartAttack()
