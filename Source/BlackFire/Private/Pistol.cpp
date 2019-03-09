@@ -4,14 +4,14 @@
 
 APistol::APistol()
 {
-	currentAmmoInMagazine = 10;
-	maxAmmoInMagazine = 10;
-	currentAmmo = 50;
-	maxAmmo = 50;
+	data.currentAmmoInMagazine = 10;
+	data.maxAmmoInMagazine = 10;
+	data.currentAmmo = 50;
+	data.maxAmmo = 50;
 
-	damage = 15;
-	reloadingTime = 1.f;
-	fireRate = 240;
+	data.damage = 15;
+	data.reloadingTime = 1.f;
+	data.fireRate = 240;
 
-	mode = EShootingMode::Auto;
+	data.mode = EShootingMode::Auto;
 }
