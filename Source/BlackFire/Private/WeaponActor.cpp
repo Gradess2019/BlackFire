@@ -23,7 +23,7 @@ void AWeaponActor::BeginPlay()
 void AWeaponActor::InitFireTimeline()
 {
 	fireTimeline = NewObject<UTimelineComponent>(this, "FireTimeline");
-	const float fireTimelineLength = 60.f / fireRate;
+	const float fireTimelineLength = 60.f / data.fireRate;
 	fireTimeline->SetTimelineLength(fireTimelineLength);
 	fireTimeline->SetTimelineLengthMode(ETimelineLengthMode::TL_TimelineLength);
 	fireTimeline->SetNetAddressable();
@@ -38,7 +38,7 @@ void AWeaponActor::InitFireTimeline()
 void AWeaponActor::InitReloadTimeline()
 {
 	reloadTimeline = NewObject<UTimelineComponent>(this, "ReloadTimeline");
-	reloadTimeline->SetTimelineLength(reloadingTime);
+	reloadTimeline->SetTimelineLength(data.reloadingTime);
 	reloadTimeline->SetTimelineLengthMode(ETimelineLengthMode::TL_TimelineLength);
 	reloadTimeline->SetNetAddressable();
 
@@ -62,7 +62,7 @@ void AWeaponActor::StartFire()
 {
 	if (CanStartFireTimeline())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Weapon info: Damage %f, current ammo %d, max ammo %d, max ammo in magazine %d, reloading time %f, fire rate %f"), damage, currentAmmo, maxAmmo, maxAmmoInMagazine, reloadingTime, fireRate);
+		//UE_LOG(LogTemp, Warning, TEXT("Weapon info: Damage %f, current ammo %d, max ammo %d, max ammo in magazine %d, reloading time %f, fire rate %f"), data.damage, data.currentAmmo, data.maxAmmo, data.maxAmmoInMagazine, data.reloadingTime, data.fireRate);
 
 		EnableShootingMode();
 		fireTimeline->PlayFromStart();
@@ -86,12 +86,12 @@ bool AWeaponActor::IsTimelinesStopped()
 
 bool AWeaponActor::HasAmmoInMagazine()
 {
-	return currentAmmoInMagazine > 0;
+	return data.currentAmmoInMagazine > 0;
 }
 
 void AWeaponActor::EnableShootingMode()
 {
-	switch (mode)
+	switch (data.mode)
 	{
 	
 		case EShootingMode::Single:
@@ -124,11 +124,11 @@ void AWeaponActor::Fire()
 
 	if (hitObject)
 	{
-		hitObject->TakeDamage(damage);
+		hitObject->TakeDamage(data.damage);
 	}
 
-	currentAmmoInMagazine--;
-	UE_LOG(LogTemp, Warning, TEXT("Current ammo in magazine: %d"), currentAmmoInMagazine);
+	data.currentAmmoInMagazine--;
+	owner->FireEvent();
 	CheckAmmoInMagazine();
 }
 
@@ -170,12 +170,12 @@ bool AWeaponActor::CanStartReloadTimeline()
 
 bool AWeaponActor::HasSpaceInMagazine()
 {
-	return currentAmmoInMagazine < maxAmmoInMagazine;
+	return data.currentAmmoInMagazine < data.maxAmmoInMagazine;
 }
 
 bool AWeaponActor::HasAmmo()
 {
-	return currentAmmo > 0;
+	return data.currentAmmo > 0;
 }
 
 void AWeaponActor::CheckAmmoInMagazine()
@@ -202,18 +202,23 @@ void AWeaponActor::SetWeaponOwner(IWeaponOwner* newOwner)
 
 void AWeaponActor::FillMagazine()
 {
-	uint16 freeSpace = maxAmmoInMagazine - currentAmmoInMagazine;
+	uint16 freeSpace = data.maxAmmoInMagazine - data.currentAmmoInMagazine;
 	if (freeSpace > 0)
 	{
-		if (currentAmmo > freeSpace)
+		if (data.currentAmmo > freeSpace)
 		{
-			currentAmmo -= freeSpace;
+			data.currentAmmo -= freeSpace;
 		} else
 		{
-			freeSpace = currentAmmo;
-			currentAmmo = 0;
+			freeSpace = data.currentAmmo;
+			data.currentAmmo = 0;
 		}
-		currentAmmoInMagazine += freeSpace;
+		data.currentAmmoInMagazine += freeSpace;
 	}
-	
+	owner->ReloadEvent();
+}
+
+FWeaponData AWeaponActor::GetData()
+{
+	return data;
 }

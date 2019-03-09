@@ -8,6 +8,7 @@
 #include "WeaponOwner.h"
 #include "DestroyableObject.h"
 #include "BlackFire.h"
+#include "PlayerSubject.h"
 #include "GameFramework/Actor.h"
 #include "WeaponActor.generated.h"
 
@@ -35,32 +36,13 @@ public:
 	void SetOwnerTeam(ETeam newTeam);
 	void SetWeaponOwner(IWeaponOwner* newOwner);
 
+	FWeaponData GetData();
+
 protected:
 
-	UPROPERTY(EditDefaultsOnly, Category = "Weapon config")
-	uint16 currentAmmoInMagazine;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Weapon config")
-	uint16 maxAmmoInMagazine;
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon configuration")
+	FWeaponData data;
 	
-	UPROPERTY(EditDefaultsOnly, Category = "Weapon config")
-	uint16 currentAmmo;
-	
-	UPROPERTY(EditDefaultsOnly, Category = "Weapon config")
-	uint16 maxAmmo;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Weapon config")
-	float damage;
-	
-	UPROPERTY(EditDefaultsOnly, Category = "Weapon config")
-	float reloadingTime;
-	
-	UPROPERTY(EditDefaultsOnly, Category = "Weapon config")
-	float fireRate;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Weapon config")
-	EShootingMode mode;
-
 	ETeam currentTeam;
 
 	const FName fireTraceTag;
