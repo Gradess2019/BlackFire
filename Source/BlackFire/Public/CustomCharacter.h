@@ -5,12 +5,12 @@
 #include "CoreMinimal.h"
 #include "DestroyableObject.h"
 #include "BlackFire.h"
-#include "Weapon.h"
+#include "WeaponActor.h"
 #include "GameFramework/Character.h"
 #include "CustomCharacter.generated.h"
 
-UCLASS()
-class BLACKFIRE_API ACustomCharacter : public ACharacter, public IDestroyableObject
+UCLASS(Abstract)
+class BLACKFIRE_API ACustomCharacter : public ACharacter, public IDestroyableObject, public IWeaponOwner
 {
 	GENERATED_BODY()
 
@@ -25,17 +25,31 @@ public:
 
 	void Die();
 
-	TSet<UWeapon*>* GetWeaponSet();
+	TSet<AWeaponActor*>* GetWeaponSet();
 	
-	UWeapon* GetCurrentWeapon();
+	AWeaponActor* GetCurrentWeapon();
 
 protected:
 
+	UPROPERTY(EditDefaultsOnly, Category = "Character configuration")
+	TSet<TSubclassOf<AWeaponActor> > weaponClassSet;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Character configuration")
 	float health;
 
-	UWeapon* weapon;
-	TSet<UWeapon*> weaponSet;
+	AWeaponActor* weapon;
+	TSet<AWeaponActor*> weaponSet;
 
 	ETeam team;
 
+	class USceneComponent* weaponPoint;
+
+	virtual void BeginPlay() override;
+	virtual FVector GetEyesPosition() override;
+	virtual FVector GetEyesForwardVector() override;
+	virtual uint32 GetID() override;
+	virtual void FireEvent() override;
+	virtual void ReloadEvent() override;
+	
+	void AttachWeaponActor();
 };

@@ -13,12 +13,18 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class BLACKFIRE_API ACustomPlayerController : public APlayerController, public IGameActions
 {
 	GENERATED_BODY()
-	
+public:
+	ACustomPlayerController();
+
 private:
+
+	UPROPERTY(EditDefaultsOnly, Category = "Character configuration")
+	TSubclassOf<UGUI> GUIClass;
+
 	UCameraComponent* playerCamera;
 
 	UFUNCTION()
@@ -27,8 +33,7 @@ private:
 	inline void InitControlledPawn();
 	void InitCamera();
 
-	void Attack() override;
-	void Reload() override;
+	
 	void SetupInputComponent() override;
 
 	void MoveForward(float value);
@@ -37,10 +42,20 @@ private:
 	void TurnAround(float value);
 	
 	bool IsInputZero(float value);
+	bool IsCorrectCameraPitch(float value);
+
+	inline void NextWeapon();
+	inline void PreviousWeapon();
+	inline APlayerCharacter* GetControlledPlayer();
+
 
 	inline void Move(FVector direction, float value);
 
 	inline FVector GetRightDirection();
 	inline FVector GetForwardDirection();
+
+	inline void StartAttack() override;
+	inline void StopAttack() override;
+	inline void Reload() override;
 
 };

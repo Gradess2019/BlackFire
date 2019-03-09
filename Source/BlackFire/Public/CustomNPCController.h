@@ -21,7 +21,8 @@ private:
 	UFUNCTION()
 	void BeginPlay() override;
 
-	void Attack() override;
+	void StartAttack() override;
+	void StopAttack() override;
 	void Reload() override;
 
 };

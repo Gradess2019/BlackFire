@@ -3,14 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "WeaponActor.h"
-#include "CustomCharacter.h"
 #include "UObject/Interface.h"
-#include "GameActions.generated.h"
+#include "PlayerObserver.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
-class UGameActions : public UInterface
+class UPlayerObserver : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -18,18 +16,12 @@ class UGameActions : public UInterface
 /**
  * 
  */
-class BLACKFIRE_API IGameActions
+class BLACKFIRE_API IPlayerObserver
 {
 	GENERATED_BODY()
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
-protected:
-	ACustomCharacter* controlledPawn;
+public:
 
-	virtual void StartAttack() = 0;
-	virtual void StopAttack() = 0;
-	virtual void Reload() = 0;
-
-	virtual void DropWeapon(AWeaponActor*);
-
+	virtual void Update(class IPlayerSubject* subject) = 0;
 };

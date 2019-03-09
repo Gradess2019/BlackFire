@@ -2,7 +2,7 @@
 
 #include "GameActions.h"
 
-void IGameActions::DropWeapon(UWeapon* weapon)
+void IGameActions::DropWeapon(AWeaponActor* weapon)
 {
 	controlledPawn->GetWeaponSet()->Remove(weapon);
 }
