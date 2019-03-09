@@ -142,7 +142,10 @@ FHitResult AWeaponActor::GetHit()
 	FCollisionObjectQueryParams collisionObjectParams(DestroyableObjectTrace);
 	FCollisionQueryParams collisionParams;
 	collisionParams.bTraceComplex = true;
-	collisionParams.TraceTag = fireTraceTag;
+
+	//Draw Line trace
+	//collisionParams.TraceTag = fireTraceTag;
+
 	collisionParams.AddIgnoredActor(owner->GetID());
 	bool isHitted = GetWorld()->LineTraceSingleByObjectType(
 		hit,
