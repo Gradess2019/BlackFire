@@ -47,4 +47,7 @@ private:
 
 	virtual FWeaponData GetWeaponData() override;
 
+	void SetWeapon(int32 id);
+	AWeaponActor* GetWeaponById(int32 id);
+
 };

@@ -84,19 +84,36 @@ void APlayerCharacter::NextWeapon()
 	if (weaponArray.Num() > 1 && weaponArray.Find(weapon, currentWeaponID))
 	{
 		int32 newWeaponID = currentWeaponID + 1;
-		if (weaponArray.IsValidIndex(newWeaponID))
-		{
-			weapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-			weapon->SetActorHiddenInGame(true);
 
-			weapon = weaponArray[newWeaponID];
-		} else
+		if (!weaponArray.IsValidIndex(newWeaponID))
 		{
-			weapon = weaponArray[0];
+			newWeaponID = 0;
 		}
-
+		SetWeapon(newWeaponID);
 		AttachWeaponActor();
 	}
+	Notify();
+}
+
+void APlayerCharacter::SetWeapon(int32 id)
+{
+	weapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	weapon->SetActorHiddenInGame(true);
+
+	weapon = GetWeaponById(id);
+	weapon->SetActorHiddenInGame(false);
+}
+
+AWeaponActor* APlayerCharacter::GetWeaponById(int32 id)
+{
+	TArray<AWeaponActor*> weaponArray = weaponSet.Array();
+
+	if (weaponArray.IsValidIndex(id))
+	{
+		return weaponArray[id];
+	}
+
+	return nullptr;
 }
 
 void APlayerCharacter::PreviousWeapon()
@@ -107,17 +124,13 @@ void APlayerCharacter::PreviousWeapon()
 	if (weaponArray.Num() > 1 && weaponArray.Find(weapon, currentWeaponID))
 	{
 		int32 newWeaponID = currentWeaponID - 1;
-		if (weaponArray.IsValidIndex(newWeaponID))
+		if (!weaponArray.IsValidIndex(newWeaponID))
 		{
-			weapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-			weapon->SetActorHiddenInGame(true);
-
-			weapon = weaponArray[newWeaponID];
-		} else
-		{
-			weapon = weaponArray[weaponArray.Num() - 1];
+			newWeaponID = weaponArray.Num() - 1;
 		}
-
+		SetWeapon(newWeaponID);
 		AttachWeaponActor();
 	}
+
+	Notify();
 }
