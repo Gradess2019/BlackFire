@@ -217,3 +217,8 @@ void AWeaponActor::FillMagazine()
 	}
 	
 }
+
+FWeaponData AWeaponActor::GetData()
+{
+	return data;
+}

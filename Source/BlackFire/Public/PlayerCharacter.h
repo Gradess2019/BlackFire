@@ -6,6 +6,7 @@
 #include "CustomCharacter.h"
 #include "Pistol.h"
 #include "WeaponOwner.h"
+#include "PlayerSubject.h"
 #include "Camera/CameraComponent.h"
 #include "PlayerCharacter.generated.h"
 
@@ -14,7 +15,7 @@ class ACustomPlayerController;
  * 
  */
 UCLASS()
-class BLACKFIRE_API APlayerCharacter : public ACustomCharacter
+class BLACKFIRE_API APlayerCharacter : public ACustomCharacter, public IPlayerSubject
 {
 	GENERATED_BODY()
 	
@@ -39,4 +40,6 @@ private:
 
 	FVector GetEyesPosition() override;
 	FVector GetEyesForwardVector() override;
+
+	virtual FWeaponData GetWeaponData() override;
 };

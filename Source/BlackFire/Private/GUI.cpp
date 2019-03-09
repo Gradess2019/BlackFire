@@ -4,5 +4,6 @@
 
 void UGUI::Update(class IPlayerSubject* subject)
 {
-
+	FWeaponData weaponData = subject->GetWeaponData();
+	
 }

@@ -35,6 +35,8 @@ public:
 	void SetOwnerTeam(ETeam newTeam);
 	void SetWeaponOwner(IWeaponOwner* newOwner);
 
+	FWeaponData GetData();
+
 protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon configuration")

@@ -59,3 +59,8 @@ FVector APlayerCharacter::GetEyesForwardVector()
 {
 	return cameraComponent->GetForwardVector();
 }
+
+FWeaponData APlayerCharacter::GetWeaponData()
+{
+	return weapon->GetData();
+}

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "PlayerObserver.h"
 #include "WeaponActor.h"
+#include "BlackFire.h"
 #include "UObject/Interface.h"
 #include "PlayerSubject.generated.h"
 
@@ -29,7 +30,7 @@ public:
 	virtual void DetachObserver(IPlayerObserver* observer);
 	virtual void Notify();
 
-	
+	virtual FWeaponData GetWeaponData() = 0;
 
 protected:
 
