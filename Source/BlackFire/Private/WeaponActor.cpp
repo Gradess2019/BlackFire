@@ -113,7 +113,7 @@ void AWeaponActor::StopFire()
 {
 	if (fireTimeline->IsPlaying())
 	{
-		fireTimeline->Stop();
+		fireTimeline->SetLooping(false);
 	}
 }
 
