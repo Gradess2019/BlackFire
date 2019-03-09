@@ -6,6 +6,7 @@ void ACustomPlayerController::BeginPlay()
 {
 	InitControlledPawn();
 	InitCamera();
+	this->bAttachToPawn = true;
 }
 
 void ACustomPlayerController::InitControlledPawn()
