@@ -32,8 +32,10 @@ private:
 	
 	inline void InitControlledPawn();
 	void InitCamera();
+	void InitGUI();
+	void PrintDebugReplicationMessage(FString message, bool isSuccess);
+	inline FString GetGamePrefix();
 
-	
 	void SetupInputComponent() override;
 
 	void MoveForward(float value);
@@ -48,7 +50,6 @@ private:
 	inline void PreviousWeapon();
 	inline void Jump();
 	inline APlayerCharacter* GetControlledPlayer();
-
 
 	inline void Move(FVector direction, float value);
 

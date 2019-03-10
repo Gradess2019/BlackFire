@@ -8,6 +8,9 @@ APlayerCharacter::APlayerCharacter()
 	SetController();
 	SetUseControllerRotation();
 	CreateAndAttachCamera();
+
+	bReplicates = true;
+	bReplicateMovement = true;
 }
 
 void APlayerCharacter::SetController()

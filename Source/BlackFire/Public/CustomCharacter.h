@@ -23,6 +23,7 @@ public:
 	UFUNCTION()
 	void TakeDamage(float damage) override;
 
+	UFUNCTION(BlueprintCallable)
 	void Die();
 
 	TSet<AWeaponActor*>* GetWeaponSet();
@@ -34,7 +35,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Character configuration")
 	TSet<TSubclassOf<AWeaponActor> > weaponClassSet;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Character configuration")
+	UPROPERTY(EditDefaultsOnly, Replicated, Category = "Character configuration")
 	float health;
 
 	AWeaponActor* weapon;

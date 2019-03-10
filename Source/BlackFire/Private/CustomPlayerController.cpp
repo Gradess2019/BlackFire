@@ -2,6 +2,12 @@
 
 #include "CustomPlayerController.h"
 #include "GUI.h"
+#include "Kismet/KismetSystemLibrary.h"
+
+inline FColor GetDebugColorMessage(bool isSuccess);
+
+#define SUCCESS true
+#define FAILURE false
 
 ACustomPlayerController::ACustomPlayerController()
 {
@@ -14,31 +20,64 @@ void ACustomPlayerController::BeginPlay()
 
 	InitControlledPawn();
 	InitCamera();
-
-	APlayerCharacter* player = Cast<APlayerCharacter>(controlledPawn);
-
-	UGUI* gui = CreateWidget<UGUI>(this, GUIClass);
-	if (gui)
-	{
-		gui->AddToViewport();
-		player->AttachObserver((IPlayerObserver*)gui);
-	}
+	InitGUI();
 }
 
 void ACustomPlayerController::InitControlledPawn()
 {
 	controlledPawn = Cast<ACustomCharacter>(GetPawn());
+
+	if (controlledPawn)
+	{
+		PrintDebugReplicationMessage(FString("Controlled pawn is true"), SUCCESS);
+	}
+}
+
+void ACustomPlayerController::PrintDebugReplicationMessage(FString message, bool isSuccess)
+{
+	FColor color = GetDebugColorMessage(isSuccess);
+	FString resultMessage = GetGamePrefix() + message;
+	GEngine->AddOnScreenDebugMessage(-1, 20.f, color, resultMessage);
+}
+
+FColor GetDebugColorMessage(bool isSuccess)
+{
+	return (isSuccess) ? FColor::Green : FColor::Yellow;
+}
+
+FString ACustomPlayerController::GetGamePrefix()
+{
+	return (HasAuthority()) ? FString("Server: ") : FString("Client: ");
 }
 
 void ACustomPlayerController::InitCamera()
 {
-	TSet<UActorComponent*> components = controlledPawn->GetComponents();
-	for (UActorComponent* component : components)
+	if (controlledPawn)
 	{
-		if (component->IsA(UCameraComponent::StaticClass()))
+		TSet<UActorComponent*> components = controlledPawn->GetComponents();
+		for (UActorComponent* component : components)
 		{
-			playerCamera = Cast<UCameraComponent>(component);
-			break;
+			if (component->IsA(UCameraComponent::StaticClass()))
+			{
+				playerCamera = Cast<UCameraComponent>(component);
+				PrintDebugReplicationMessage(FString("Camera was successfully initialized"), SUCCESS);
+				break;
+			}
+		}
+	}
+}
+
+void ACustomPlayerController::InitGUI()
+{
+	if (controlledPawn)
+	{
+		APlayerCharacter* player = Cast<APlayerCharacter>(controlledPawn);
+
+		UGUI* gui = CreateWidget<UGUI>(this, GUIClass);
+		if (gui)
+		{
+			gui->AddToViewport();
+			player->AttachObserver((IPlayerObserver*)gui);
 		}
 	}
 }

@@ -2,11 +2,22 @@
 
 #include "CustomCharacter.h"
 #include "WeaponPoint.h"
+#include "Kismet/GameplayStatics.h"
+#include "GameFramework/PlayerStart.h"
+#include "UnrealNetwork.h"
 
 ACustomCharacter::ACustomCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	
+	this->bReplicateMovement = true;
+	this->bReplicates = true;
+}
+
+void ACustomCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ACustomCharacter, health);
 }
 
 void ACustomCharacter::TakeDamage(float damage)
@@ -16,7 +27,13 @@ void ACustomCharacter::TakeDamage(float damage)
 	{
 		Die();
 	}
-	UE_LOG(LogTemp, Warning, TEXT("Taked damage %f. Current health %f"), damage, health);
+	if (HasAuthority())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Server: Taked damage %f. Current health %f"), damage, health);
+	} else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Client: Taked damage %f. Current health %f"), damage, health);
+	}
 }
 
 void ACustomCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -26,6 +43,13 @@ void ACustomCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void ACustomCharacter::Die()
 {
+	TArray<AActor*> actors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerStart::StaticClass(), actors);
+	if (actors.Num() > 0)
+	{
+		AActor* playerStart = actors[0];
+		this->SetActorLocationAndRotation(playerStart->GetActorLocation(), playerStart->GetActorRotation());
+	}
 	UE_LOG(LogTemp, Warning, TEXT("Character is dead"));
 }
 
