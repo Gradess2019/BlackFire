@@ -29,10 +29,10 @@ void ACustomCharacter::TakeDamage(float damage)
 	}
 	if (HasAuthority())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Server: Taked damage %f. Current health %f"), damage, health);
+		GEngine->AddOnScreenDebugMessage(-1, 20.f, FColor::Green, FString("Server: Took damage %f. Current health %f") + FString::SanitizeFloat(damage) + FString::SanitizeFloat(health));
 	} else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Client: Taked damage %f. Current health %f"), damage, health);
+		GEngine->AddOnScreenDebugMessage(-1, 20.f, FColor::Green, FString("Client: Took damage %f. Current health %f") + FString::SanitizeFloat(damage) + FString::SanitizeFloat(health));
 	}
 }
 
