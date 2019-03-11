@@ -23,6 +23,15 @@ public:
 	UFUNCTION()
 	void TakeDamage(float damage) override;
 
+	UFUNCTION(Server, Reliable, WithValidation)
+	void Server_TakeDamage(float damage);
+
+	UFUNCTION()
+	void DecreaseHealth(float decrement);
+
+	//UFUNCTION(NetMulticast, Unreliable)
+	//	Multicast_TakeDamge();
+
 	UFUNCTION(BlueprintCallable)
 	void Die();
 

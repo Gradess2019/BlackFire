@@ -22,18 +22,30 @@ void ACustomCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & 
 
 void ACustomCharacter::TakeDamage(float damage)
 {
-	health -= damage;
-	if (health <= 0.f)
+	if (Role < ROLE_Authority)
 	{
-		Die();
-	}
-	if (HasAuthority())
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 20.f, FColor::Green, FString("Server: Took damage %f. Current health %f") + FString::SanitizeFloat(damage) + FString::SanitizeFloat(health));
+		Server_TakeDamage(damage);
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Client takeDamage"));
 	} else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 20.f, FColor::Green, FString("Client: Took damage %f. Current health %f") + FString::SanitizeFloat(damage) + FString::SanitizeFloat(health));
+		DecreaseHealth(damage);
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Server takeDamage"));
 	}
+}
+
+void ACustomCharacter::Server_TakeDamage_Implementation(float damage)
+{
+	DecreaseHealth(damage);
+}
+
+bool ACustomCharacter::Server_TakeDamage_Validate(float damage)
+{
+	return true;
+}
+
+void ACustomCharacter::DecreaseHealth(float decrement)
+{
+	health -= decrement;
 }
 
 void ACustomCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

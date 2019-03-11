@@ -49,7 +49,7 @@ void APlayerCharacter::OnConstruction(const FTransform& transform)
 
 void APlayerCharacter::SetCameraRelativeLocation()
 {
-	FVector relativeLocation = FVector(-150.f, 20.f, 60.f);
+	FVector relativeLocation = FVector(0.f, 0.f, 60.f);
 	cameraComponent->SetRelativeLocation(relativeLocation);
 }
 
