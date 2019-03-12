@@ -34,6 +34,7 @@ void APlayerCharacter::CreateAndAttachCamera()
 void APlayerCharacter::CreateCamera()
 {
 	cameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	cameraComponent->SetIsReplicated(true);
 }
 
 void APlayerCharacter::AttachCamera()

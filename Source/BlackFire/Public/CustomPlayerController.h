@@ -56,8 +56,39 @@ private:
 	inline FVector GetRightDirection();
 	inline FVector GetForwardDirection();
 
-	inline void StartAttack() override;
-	inline void StopAttack() override;
-	inline void Reload() override;
 
+	// GameActions implementation
+	inline void Client_StartAttack() override;
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void Server_StartAttack(ACustomCharacter* controlledPawn);
+
+	UFUNCTION(NetMulticast, Unreliable)
+	void Multicast_StartAttack(ACustomCharacter* controlledPawn);
+
+	void StartAttack(ACustomCharacter* controlledPawn);
+
+
+
+	inline void Client_StopAttack() override;
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void Server_StopAttack(ACustomCharacter* controlledPawn);
+
+	UFUNCTION(NetMulticast, Unreliable)
+	void Multicast_StopAttack(ACustomCharacter* controlledPawn);
+
+	void StopAttack(ACustomCharacter* controlledPawn);
+
+
+
+	inline void Client_Reload() override;
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void Server_Reload(ACustomCharacter* controlledPawn);
+
+	UFUNCTION(NetMulticast, Unreliable)
+	void Multicast_Reload(ACustomCharacter* controlledPawn);
+
+	void Reload(ACustomCharacter* controlledPawn);
 };

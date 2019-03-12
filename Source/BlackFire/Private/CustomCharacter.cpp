@@ -22,25 +22,11 @@ void ACustomCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & 
 
 void ACustomCharacter::TakeDamage(float damage)
 {
-	if (Role < ROLE_Authority)
-	{
-		Server_TakeDamage(damage);
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Client takeDamage"));
-	} else
-	{
-		DecreaseHealth(damage);
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Server takeDamage"));
-	}
-}
-
-void ACustomCharacter::Server_TakeDamage_Implementation(float damage)
-{
 	DecreaseHealth(damage);
-}
-
-bool ACustomCharacter::Server_TakeDamage_Validate(float damage)
-{
-	return true;
+	if (health <= 0.f)
+	{
+		Respawn();
+	}
 }
 
 void ACustomCharacter::DecreaseHealth(float decrement)
@@ -53,7 +39,7 @@ void ACustomCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
-void ACustomCharacter::Die()
+void ACustomCharacter::Respawn()
 {
 	TArray<AActor*> actors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerStart::StaticClass(), actors);
@@ -61,6 +47,7 @@ void ACustomCharacter::Die()
 	{
 		AActor* playerStart = actors[0];
 		this->SetActorLocationAndRotation(playerStart->GetActorLocation(), playerStart->GetActorRotation());
+		health = 100.f;
 	}
 	UE_LOG(LogTemp, Warning, TEXT("Character is dead"));
 }

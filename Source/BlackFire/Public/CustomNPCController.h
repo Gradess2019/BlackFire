@@ -21,8 +21,8 @@ private:
 	UFUNCTION()
 	void BeginPlay() override;
 
-	void StartAttack() override;
-	void StopAttack() override;
-	void Reload() override;
+	void Client_StartAttack() override;
+	void Client_StopAttack() override;
+	void Client_Reload() override;
 
 };
