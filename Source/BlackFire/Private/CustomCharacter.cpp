@@ -4,6 +4,7 @@
 #include "WeaponPoint.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/PlayerStart.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "UnrealNetwork.h"
 
 ACustomCharacter::ACustomCharacter()
@@ -27,6 +28,8 @@ void ACustomCharacter::TakeDamage(float damage)
 	{
 		Respawn();
 	}
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, UKismetSystemLibrary::GetDisplayName(this)+ FString(" \n Health: ") + FString::SanitizeFloat(health));
+
 }
 
 void ACustomCharacter::DecreaseHealth(float decrement)
