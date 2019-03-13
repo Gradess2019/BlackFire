@@ -25,6 +25,12 @@ void APlayerCharacter::SetUseControllerRotation()
 	this->bUseControllerRotationRoll = true;
 }
 
+void APlayerCharacter::TakeDamage(float damage)
+{
+	Super::TakeDamage(damage);
+	Notify();
+}
+
 void APlayerCharacter::CreateAndAttachCamera()
 {
 	CreateCamera();
@@ -66,6 +72,7 @@ FVector APlayerCharacter::GetEyesForwardVector()
 
 void APlayerCharacter::FireEvent()
 {
+	Super::FireEvent();
 	Notify();
 }
 
