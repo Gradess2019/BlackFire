@@ -56,10 +56,6 @@ private:
 	inline FVector GetRightDirection();
 	inline FVector GetForwardDirection();
 
-	UFUCNTION(Client)
-	void Client_Notify();
-
-
 	// GameActions implementation
 	inline void Client_StartAttack() override;
 
