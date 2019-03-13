@@ -23,8 +23,14 @@ public:
 	UFUNCTION()
 	void TakeDamage(float damage) override;
 
+	UFUNCTION()
+	void DecreaseHealth(float decrement);
+
+	//UFUNCTION(NetMulticast, Unreliable)
+	//	Multicast_TakeDamge();
+
 	UFUNCTION(BlueprintCallable)
-	void Die();
+	void Respawn();
 
 	TSet<AWeaponActor*>* GetWeaponSet();
 	

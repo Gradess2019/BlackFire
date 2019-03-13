@@ -37,7 +37,7 @@ void ACustomPlayerController::PrintDebugReplicationMessage(FString message, bool
 {
 	FColor color = GetDebugColorMessage(isSuccess);
 	FString resultMessage = GetGamePrefix() + message;
-	GEngine->AddOnScreenDebugMessage(-1, 20.f, color, resultMessage);
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, color, resultMessage);
 }
 
 FColor GetDebugColorMessage(bool isSuccess)
@@ -93,9 +93,9 @@ void ACustomPlayerController::SetupInputComponent()
 	InputComponent->BindAction("PreviousWeapon", EInputEvent::IE_Pressed, this, &ACustomPlayerController::PreviousWeapon);
 	InputComponent->BindAction("NextWeapon", EInputEvent::IE_Released, this, &ACustomPlayerController::NextWeapon);
 	InputComponent->BindAction("Jump", EInputEvent::IE_Released, this, &ACustomPlayerController::Jump);
-	InputComponent->BindAction("Attack", EInputEvent::IE_Pressed, this, &ACustomPlayerController::StartAttack);
-	InputComponent->BindAction("Attack", EInputEvent::IE_Released, this, &ACustomPlayerController::StopAttack);
-	InputComponent->BindAction("Reload", EInputEvent::IE_Pressed, this, &ACustomPlayerController::Reload);
+	InputComponent->BindAction("Attack", EInputEvent::IE_Pressed, this, &ACustomPlayerController::Client_StartAttack);
+	InputComponent->BindAction("Attack", EInputEvent::IE_Released, this, &ACustomPlayerController::Client_StopAttack);
+	InputComponent->BindAction("Reload", EInputEvent::IE_Pressed, this, &ACustomPlayerController::Client_Reload);
 }
 
 void ACustomPlayerController::MoveForward(float value)
@@ -181,17 +181,81 @@ void ACustomPlayerController::Jump()
 	GetControlledPlayer()->Jump();
 }
 
-void ACustomPlayerController::StartAttack()
+void ACustomPlayerController::Client_StartAttack()
+{
+	if (Role < ROLE_Authority)
+	{
+		Server_StartAttack(controlledPawn);
+	} else
+	{
+		StartAttack(controlledPawn);
+	}
+}
+
+void ACustomPlayerController::Server_StartAttack_Implementation(ACustomCharacter* controlledPawn)
+{
+	StartAttack(controlledPawn);
+}
+
+bool ACustomPlayerController::Server_StartAttack_Validate(ACustomCharacter* controlledPawn)
+{
+	return IsValid(controlledPawn);
+}
+
+void ACustomPlayerController::StartAttack(ACustomCharacter* controlledPawn)
 {
 	controlledPawn->GetCurrentWeapon()->StartFire();
 }
 
-void ACustomPlayerController::StopAttack()
+void ACustomPlayerController::Client_StopAttack()
+{
+	if (Role < ROLE_Authority)
+	{
+		Server_StopAttack(controlledPawn);
+	} else
+	{
+		StopAttack(controlledPawn);
+	}
+}
+
+void ACustomPlayerController::Server_StopAttack_Implementation(ACustomCharacter* controlledPawn)
+{
+	StopAttack(controlledPawn);
+}
+
+bool ACustomPlayerController::Server_StopAttack_Validate(ACustomCharacter* controlledPawn)
+{
+	return IsValid(controlledPawn);
+}
+
+void ACustomPlayerController::StopAttack(ACustomCharacter* controlledPawn)
 {
 	controlledPawn->GetCurrentWeapon()->StopFire();
 }
 
-void ACustomPlayerController::Reload()
+void ACustomPlayerController::Client_Reload()
+{
+	if (Role < ROLE_Authority)
+	{
+		Server_Reload(controlledPawn);
+	} else
+	{
+		Reload(controlledPawn);
+	}
+}
+
+void ACustomPlayerController::Server_Reload_Implementation(ACustomCharacter* controlledPawn)
+{
+	Reload(controlledPawn);
+}
+
+bool ACustomPlayerController::Server_Reload_Validate(ACustomCharacter* controlledPawn)
+{
+	return IsValid(controlledPawn);
+}
+
+void ACustomPlayerController::Reload(ACustomCharacter* controlledPawn)
 {
 	controlledPawn->GetCurrentWeapon()->Reload();
 }
+

@@ -4,6 +4,7 @@
 #include "WeaponPoint.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/PlayerStart.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "UnrealNetwork.h"
 
 ACustomCharacter::ACustomCharacter()
@@ -22,18 +23,16 @@ void ACustomCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & 
 
 void ACustomCharacter::TakeDamage(float damage)
 {
-	health -= damage;
+	DecreaseHealth(damage);
 	if (health <= 0.f)
 	{
-		Die();
+		Respawn();
 	}
-	if (HasAuthority())
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Server: Taked damage %f. Current health %f"), damage, health);
-	} else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Client: Taked damage %f. Current health %f"), damage, health);
-	}
+}
+
+void ACustomCharacter::DecreaseHealth(float decrement)
+{
+	health -= decrement;
 }
 
 void ACustomCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -41,7 +40,7 @@ void ACustomCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
-void ACustomCharacter::Die()
+void ACustomCharacter::Respawn()
 {
 	TArray<AActor*> actors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerStart::StaticClass(), actors);
@@ -49,6 +48,7 @@ void ACustomCharacter::Die()
 	{
 		AActor* playerStart = actors[0];
 		this->SetActorLocationAndRotation(playerStart->GetActorLocation(), playerStart->GetActorRotation());
+		health = 100.f;
 	}
 	UE_LOG(LogTemp, Warning, TEXT("Character is dead"));
 }

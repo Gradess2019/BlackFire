@@ -26,9 +26,9 @@ class BLACKFIRE_API IGameActions
 protected:
 	ACustomCharacter* controlledPawn;
 
-	virtual void StartAttack() = 0;
-	virtual void StopAttack() = 0;
-	virtual void Reload() = 0;
+	virtual void Client_StartAttack() = 0;
+	virtual void Client_StopAttack() = 0;
+	virtual void Client_Reload() = 0;
 
 	virtual void DropWeapon(AWeaponActor*);
 

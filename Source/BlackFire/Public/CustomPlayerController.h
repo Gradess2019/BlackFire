@@ -20,12 +20,12 @@ class BLACKFIRE_API ACustomPlayerController : public APlayerController, public I
 public:
 	ACustomPlayerController();
 
-private:
-
 	UPROPERTY(EditDefaultsOnly, Category = "Character configuration")
 	TSubclassOf<UGUI> GUIClass;
 
 	UCameraComponent* playerCamera;
+
+private:
 
 	UFUNCTION()
 	void BeginPlay() override;
@@ -33,6 +33,8 @@ private:
 	inline void InitControlledPawn();
 	void InitCamera();
 	void InitGUI();
+
+
 	void PrintDebugReplicationMessage(FString message, bool isSuccess);
 	inline FString GetGamePrefix();
 
@@ -56,8 +58,25 @@ private:
 	inline FVector GetRightDirection();
 	inline FVector GetForwardDirection();
 
-	inline void StartAttack() override;
-	inline void StopAttack() override;
-	inline void Reload() override;
+	// GameActions implementation
+	inline void Client_StartAttack() override;
 
+	UFUNCTION(Server, Reliable, WithValidation)
+	void Server_StartAttack(ACustomCharacter* controlledPawn);
+
+	void StartAttack(ACustomCharacter* controlledPawn);
+
+	inline void Client_StopAttack() override;
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void Server_StopAttack(ACustomCharacter* controlledPawn);
+
+	void StopAttack(ACustomCharacter* controlledPawn);
+
+	inline void Client_Reload() override;
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void Server_Reload(ACustomCharacter* controlledPawn);
+
+	void Reload(ACustomCharacter* controlledPawn);
 };
