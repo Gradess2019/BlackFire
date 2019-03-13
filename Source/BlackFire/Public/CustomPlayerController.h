@@ -20,12 +20,12 @@ class BLACKFIRE_API ACustomPlayerController : public APlayerController, public I
 public:
 	ACustomPlayerController();
 
-private:
-
 	UPROPERTY(EditDefaultsOnly, Category = "Character configuration")
 	TSubclassOf<UGUI> GUIClass;
 
 	UCameraComponent* playerCamera;
+
+private:
 
 	UFUNCTION()
 	void BeginPlay() override;
@@ -33,6 +33,8 @@ private:
 	inline void InitControlledPawn();
 	void InitCamera();
 	void InitGUI();
+
+
 	void PrintDebugReplicationMessage(FString message, bool isSuccess);
 	inline FString GetGamePrefix();
 

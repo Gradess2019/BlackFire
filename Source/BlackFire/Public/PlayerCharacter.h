@@ -51,4 +51,9 @@ private:
 	void SetWeapon(int32 id);
 	AWeaponActor* GetWeaponById(int32 id);
 
+	UFUNCTION(Reliable, Client)
+	void Client_Notify();
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void Server_Notify(UObject* context);
 };

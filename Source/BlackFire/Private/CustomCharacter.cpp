@@ -28,8 +28,6 @@ void ACustomCharacter::TakeDamage(float damage)
 	{
 		Respawn();
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, UKismetSystemLibrary::GetDisplayName(this)+ FString(" \n Health: ") + FString::SanitizeFloat(health));
-
 }
 
 void ACustomCharacter::DecreaseHealth(float decrement)

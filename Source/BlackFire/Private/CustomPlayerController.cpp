@@ -37,7 +37,7 @@ void ACustomPlayerController::PrintDebugReplicationMessage(FString message, bool
 {
 	FColor color = GetDebugColorMessage(isSuccess);
 	FString resultMessage = GetGamePrefix() + message;
-	GEngine->AddOnScreenDebugMessage(-1, 20.f, color, resultMessage);
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, color, resultMessage);
 }
 
 FColor GetDebugColorMessage(bool isSuccess)

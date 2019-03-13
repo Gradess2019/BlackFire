@@ -126,12 +126,12 @@ void AWeaponActor::Fire()
 
 	if (hitObject)
 	{
-		//hitObject->TakeDamage(data.damage);
 		Client_AddDamage(hitObject);
 	}
 
 	if (Role < ROLE_Authority)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("BLUAAAAAAAAAAAAAAAAAAAAAAAAAA"));
 		Server_FireEvent(Cast<UObject>(owner));
 	} else
 	{
@@ -261,7 +261,6 @@ void AWeaponActor::Client_AddDamage(IDestroyableObject* object)
 	UObject* damagedObject = Cast<UObject>(object);
 	if (GetRemoteRole() < ROLE_Authority)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Client"));
 		Server_AddDamage(damagedObject, damage);
 	} else
 	{
