@@ -9,6 +9,8 @@
 AWeaponActor::AWeaponActor() : fireTraceTag(FName("FireTraceTag"))
 {
 	PrimaryActorTick.bCanEverTick = true;
+	bReplicates = true;
+	bReplicateMovement = true;
 }
 
 void AWeaponActor::BeginPlay()
@@ -124,12 +126,31 @@ void AWeaponActor::Fire()
 
 	if (hitObject)
 	{
-		hitObject->TakeDamage(data.damage);
+		//hitObject->TakeDamage(data.damage);
+		Client_AddDamage(hitObject);
 	}
 
+	if (Role < ROLE_Authority)
+	{
+		Server_FireEvent(Cast<UObject>(owner));
+	} else
+	{
+		owner->FireEvent();
+	}
 	data.currentAmmoInMagazine--;
-	owner->FireEvent();
+	
 	CheckAmmoInMagazine();
+}
+
+void AWeaponActor::Server_FireEvent_Implementation(UObject* context)
+{
+	IWeaponOwner* weaponOwner = Cast<IWeaponOwner>(context);
+	weaponOwner->FireEvent();
+}
+
+bool AWeaponActor::Server_FireEvent_Validate(UObject* context)
+{
+	return true;
 }
 
 FHitResult AWeaponActor::GetHit()
@@ -232,4 +253,34 @@ void AWeaponActor::FillMagazine()
 FWeaponData AWeaponActor::GetData()
 {
 	return data;
+}
+
+void AWeaponActor::Client_AddDamage(IDestroyableObject* object)
+{
+	const float damage = data.damage;
+	UObject* damagedObject = Cast<UObject>(object);
+	if (GetRemoteRole() < ROLE_Authority)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Client"));
+		Server_AddDamage(damagedObject, damage);
+	} else
+	{
+		AddDamage(damagedObject, damage);
+	}
+}
+
+void AWeaponActor::Server_AddDamage_Implementation(UObject* damagedObject, const float damage)
+{
+	AddDamage(damagedObject, damage);
+}
+
+bool AWeaponActor::Server_AddDamage_Validate(UObject* damagedObject, const float damage)
+{
+	return true;
+}
+
+void AWeaponActor::AddDamage(UObject* object, const float damage)
+{
+	IDestroyableObject* damagedObject = Cast<IDestroyableObject>(object);
+	damagedObject->TakeDamage(damage);
 }

@@ -25,6 +25,7 @@ public:
 
 	void NextWeapon();
 	void PreviousWeapon();
+	void TakeDamage(float damage) override;
 
 private:
 

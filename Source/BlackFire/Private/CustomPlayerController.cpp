@@ -188,23 +188,18 @@ void ACustomPlayerController::Client_StartAttack()
 		Server_StartAttack(controlledPawn);
 	} else
 	{
-		Multicast_StartAttack(controlledPawn);
+		StartAttack(controlledPawn);
 	}
 }
 
 void ACustomPlayerController::Server_StartAttack_Implementation(ACustomCharacter* controlledPawn)
 {
-	Multicast_StartAttack(controlledPawn);
+	StartAttack(controlledPawn);
 }
 
 bool ACustomPlayerController::Server_StartAttack_Validate(ACustomCharacter* controlledPawn)
 {
 	return IsValid(controlledPawn);
-}
-
-void ACustomPlayerController::Multicast_StartAttack_Implementation(ACustomCharacter* controlledPawn)
-{
-	StartAttack(controlledPawn);
 }
 
 void ACustomPlayerController::StartAttack(ACustomCharacter* controlledPawn)
@@ -219,23 +214,18 @@ void ACustomPlayerController::Client_StopAttack()
 		Server_StopAttack(controlledPawn);
 	} else
 	{
-		Multicast_StopAttack(controlledPawn);
+		StopAttack(controlledPawn);
 	}
 }
 
 void ACustomPlayerController::Server_StopAttack_Implementation(ACustomCharacter* controlledPawn)
 {
-	Multicast_StopAttack(controlledPawn);
+	StopAttack(controlledPawn);
 }
 
 bool ACustomPlayerController::Server_StopAttack_Validate(ACustomCharacter* controlledPawn)
 {
 	return IsValid(controlledPawn);
-}
-
-void ACustomPlayerController::Multicast_StopAttack_Implementation(ACustomCharacter* controlledPawn)
-{
-	StopAttack(controlledPawn);
 }
 
 void ACustomPlayerController::StopAttack(ACustomCharacter* controlledPawn)
@@ -250,23 +240,18 @@ void ACustomPlayerController::Client_Reload()
 		Server_Reload(controlledPawn);
 	} else
 	{
-		Multicast_Reload(controlledPawn);
+		Reload(controlledPawn);
 	}
 }
 
 void ACustomPlayerController::Server_Reload_Implementation(ACustomCharacter* controlledPawn)
 {
-	Multicast_Reload(controlledPawn);
+	Reload(controlledPawn);
 }
 
 bool ACustomPlayerController::Server_Reload_Validate(ACustomCharacter* controlledPawn)
 {
 	return IsValid(controlledPawn);
-}
-
-void ACustomPlayerController::Multicast_Reload_Implementation(ACustomCharacter* controlledPawn)
-{
-	Reload(controlledPawn);
 }
 
 void ACustomPlayerController::Reload(ACustomCharacter* controlledPawn)

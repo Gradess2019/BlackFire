@@ -77,5 +77,15 @@ private:
 	
 	UFUNCTION()
 	void FillMagazine();
+
+	void Client_AddDamage(IDestroyableObject* damagedObject);
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void Server_AddDamage(UObject* object, const float damage);
 	
+	void AddDamage(UObject* object, const float damage);
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void Server_FireEvent(UObject* context);
+
 };
