@@ -63,6 +63,11 @@ AWeaponActor* ACustomCharacter::GetCurrentWeapon()
 	return weapon;
 }
 
+void ACustomCharacter::SetTeam_Implementation(ETeam newTeam)
+{
+	team = newTeam;
+}
+
 void ACustomCharacter::BeginPlay()
 {
 	Super::BeginPlay();

@@ -36,6 +36,9 @@ public:
 	
 	AWeaponActor* GetCurrentWeapon();
 
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void SetTeam(ETeam newTeam);
+
 protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Character configuration")
@@ -44,10 +47,11 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Replicated, Category = "Character configuration")
 	float health;
 
+	UPROPERTY(BlueprintReadOnly)
+	ETeam team;
+
 	AWeaponActor* weapon;
 	TSet<AWeaponActor*> weaponSet;
-
-	ETeam team;
 
 	class USceneComponent* weaponPoint;
 
