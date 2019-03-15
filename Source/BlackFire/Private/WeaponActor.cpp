@@ -123,6 +123,7 @@ void AWeaponActor::Fire()
 {
 	FHitResult hit = GetHit();
 	IDestroyableObject* hitObject = Cast<IDestroyableObject>(hit.GetActor());
+	data.currentAmmoInMagazine--;
 
 	if (hitObject)
 	{
@@ -131,13 +132,11 @@ void AWeaponActor::Fire()
 
 	if (Role < ROLE_Authority)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("BLUAAAAAAAAAAAAAAAAAAAAAAAAAA"));
 		Server_FireEvent(Cast<UObject>(owner));
 	} else
 	{
 		owner->FireEvent();
 	}
-	data.currentAmmoInMagazine--;
 	
 	CheckAmmoInMagazine();
 }
@@ -160,7 +159,10 @@ FHitResult AWeaponActor::GetHit()
 	FVector start = owner->GetEyesPosition();
 	FVector end = owner->GetEyesForwardVector() * 100000.f;
 
-	FCollisionObjectQueryParams collisionObjectParams(DestroyableObjectTrace);
+	//Hit only objects of IDestryoableObject
+	//FCollisionObjectQueryParams collisionObjectParams(DestroyableObjectTrace);
+
+	FCollisionObjectQueryParams collisionObjectParams(FCollisionObjectQueryParams::AllObjects);
 	FCollisionQueryParams collisionParams;
 	collisionParams.bTraceComplex = true;
 
