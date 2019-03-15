@@ -29,13 +29,6 @@ void APlayerCharacter::TakeDamage(float damage)
 {
 	Super::TakeDamage(damage);
 	Notify();
-	if (GetRemoteRole() < ROLE_Authority)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Client: %s"), *(FString::FromInt(observers.Num())));
-	} else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Server: %s"), *(FString::FromInt(observers.Num())));
-	}
 	//if (Role < ROLE_Authority)
 	//{
 	//	Server_Notify();
@@ -47,7 +40,6 @@ void APlayerCharacter::TakeDamage(float damage)
 
 void APlayerCharacter::Client_Notify_Implementation()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow, TEXT("Client_Notify_Implementation"));
 	Notify();
 }
 
@@ -103,7 +95,6 @@ FVector APlayerCharacter::GetEyesForwardVector()
 
 void APlayerCharacter::FireEvent()
 {
-	Super::FireEvent();
 	Notify();
 	//if (Role < ROLE_Authority)
 	//{
