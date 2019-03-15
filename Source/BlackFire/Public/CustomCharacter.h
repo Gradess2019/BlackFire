@@ -29,7 +29,7 @@ public:
 	//UFUNCTION(NetMulticast, Unreliable)
 	//	Multicast_TakeDamge();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void Respawn();
 
 	TSet<AWeaponActor*>* GetWeaponSet();
@@ -53,6 +53,9 @@ protected:
 	AWeaponActor* weapon;
 	TSet<AWeaponActor*> weaponSet;
 
+	UPROPERTY(BlueprintReadWrite)
+	AActor* spawnPoint;
+
 	class USceneComponent* weaponPoint;
 
 	virtual void BeginPlay() override;
@@ -63,4 +66,9 @@ protected:
 	virtual void ReloadEvent() override;
 	
 	void AttachWeaponActor();
+
+	FName GetSpawnPointTag();
+
+	UFUNCTION(BlueprintCallable)
+	void SetPositionToSpawn();
 };

@@ -26,7 +26,7 @@ void ACustomCharacter::TakeDamage(float damage)
 	DecreaseHealth(damage);
 	if (health <= 0.f)
 	{
-		Respawn();
+		Respawn_Implementation();
 	}
 }
 
@@ -40,17 +40,57 @@ void ACustomCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
-void ACustomCharacter::Respawn()
+void ACustomCharacter::Respawn_Implementation()
 {
-	TArray<AActor*> actors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerStart::StaticClass(), actors);
-	if (actors.Num() > 0)
+	if (!spawnPoint)
 	{
-		AActor* playerStart = actors[0];
-		this->SetActorLocationAndRotation(playerStart->GetActorLocation(), playerStart->GetActorRotation());
-		health = 100.f;
+		TArray<AActor*> spawnPoints;
+		UGameplayStatics::GetAllActorsWithTag(GetWorld(), GetSpawnPointTag(), spawnPoints);
+		if (spawnPoints.Num() > 0)
+		{
+			spawnPoint = spawnPoints[0];
+		}
 	}
-	UE_LOG(LogTemp, Warning, TEXT("Character is dead"));
+	SetPositionToSpawn();
+
+	health = 100.f;
+}
+
+void ACustomCharacter::SetPositionToSpawn()
+{
+	if (spawnPoint)
+	{
+		SetActorLocationAndRotation(spawnPoint->GetActorLocation(), spawnPoint->GetActorRotation());
+	}
+}
+
+FName ACustomCharacter::GetSpawnPointTag()
+{
+	FName tag = FName("Start");
+
+	// Не работает, почему?
+	//switch (team)
+	//{
+	//case ETeam::Blue:
+	//{
+	//	tag = FName("Blue");
+	//	break;
+
+	//}
+
+	//case ETeam::Red:
+	//{
+	//	tag = FName("Red");
+	//	break;
+	//}
+
+	//default:
+	//{
+	//	tag = FName("Start");
+	//	break;
+	//}
+	//}
+	return tag;
 }
 
 TSet<AWeaponActor*>* ACustomCharacter::GetWeaponSet()
@@ -65,7 +105,11 @@ AWeaponActor* ACustomCharacter::GetCurrentWeapon()
 
 void ACustomCharacter::SetTeam_Implementation(ETeam newTeam)
 {
-	team = newTeam;
+	if (team != newTeam)
+	{
+		team = newTeam;
+		Respawn_Implementation();
+	}
 }
 
 void ACustomCharacter::BeginPlay()
