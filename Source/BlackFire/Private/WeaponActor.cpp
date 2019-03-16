@@ -56,6 +56,38 @@ void AWeaponActor::InitReloadTimeline()
 	reloadTimeline->RegisterComponent();
 }
 
+void AWeaponActor::FillMagazine()
+{
+	uint16 freeSpace = data.maxAmmoInMagazine - data.currentAmmoInMagazine;
+	if (freeSpace > 0)
+	{
+		if (data.currentAmmo > freeSpace)
+		{
+			data.currentAmmo -= freeSpace;
+		} else
+		{
+			freeSpace = data.currentAmmo;
+			data.currentAmmo = 0;
+		}
+		data.currentAmmoInMagazine += freeSpace;
+	}
+	PlayReloadingFinishSound();
+	owner->ReloadEvent();
+}
+
+void AWeaponActor::PlayReloadingFinishSound()
+{
+	PlaySound(reloadingFinishSound);
+}
+
+void AWeaponActor::PlaySound(USoundWave* sound)
+{
+	if (sound)
+	{
+		UGameplayStatics::PlaySound2D(GetWorld(), sound);
+	}
+}
+
 void AWeaponActor::InitLineTrace()
 {
 	GetWorld()->DebugDrawTraceTag = fireTraceTag;
@@ -69,6 +101,26 @@ void AWeaponActor::StartFire()
 
 		EnableShootingMode();
 		fireTimeline->PlayFromStart();
+	}
+}
+
+void AWeaponActor::EnableShootingMode()
+{
+	switch (data.mode)
+	{
+
+	case EShootingMode::Single:
+	{
+		fireTimeline->SetLooping(false);
+		break;
+	}
+
+	case EShootingMode::Auto:
+	{
+		fireTimeline->SetLooping(true);
+		break;
+	}
+
 	}
 }
 
@@ -90,26 +142,6 @@ bool AWeaponActor::IsTimelinesStopped()
 bool AWeaponActor::HasAmmoInMagazine()
 {
 	return data.currentAmmoInMagazine > 0;
-}
-
-void AWeaponActor::EnableShootingMode()
-{
-	switch (data.mode)
-	{
-	
-		case EShootingMode::Single:
-		{
-			fireTimeline->SetLooping(false);
-			break;
-		}
-
-		case EShootingMode::Auto:
-		{
-			fireTimeline->SetLooping(true);
-			break;
-		}
-
-	}
 }
 
 void AWeaponActor::StopFire()
@@ -144,40 +176,6 @@ void AWeaponActor::Fire()
 	CheckAmmoInMagazine();
 }
 
-void AWeaponActor::PlayShotSound()
-{
-	PlaySound(shotSound);
-}
-
-void AWeaponActor::PlaySound(USoundWave* sound)
-{
-	if (sound)
-	{
-		UGameplayStatics::PlaySound2D(GetWorld(), sound);
-	}
-}
-
-void AWeaponActor::PlayReloadingStartSound()
-{
-	PlaySound(reloadingStartSound);
-}
-
-void AWeaponActor::PlayReloadingFinishSound()
-{
-	PlaySound(reloadingFinishSound);
-}
-
-void AWeaponActor::Server_FireEvent_Implementation(UObject* context)
-{
-	IWeaponOwner* weaponOwner = Cast<IWeaponOwner>(context);
-	weaponOwner->FireEvent();
-}
-
-bool AWeaponActor::Server_FireEvent_Validate(UObject* context)
-{
-	return true;
-}
-
 FHitResult AWeaponActor::GetHit()
 {
 	FHitResult hit = FHitResult(EForceInit::ForceInit);
@@ -207,89 +205,6 @@ FHitResult AWeaponActor::GetHit()
 	return hit;
 }
 
-void AWeaponActor::Reload()
-{
-	if (CanStartReloadTimeline())
-	{
-		StartReload();
-	}
-}
-
-void AWeaponActor::StartReload()
-{
-	PlayReloadingStartSound();
-	reloadTimeline->PlayFromStart();
-}
-
-bool AWeaponActor::CanStartReloadTimeline()
-{
-	return IsValidTimelines() && IsTimelinesStopped() && HasSpaceInMagazine() && HasAmmo();
-}
-
-bool AWeaponActor::HasSpaceInMagazine()
-{
-	return data.currentAmmoInMagazine < data.maxAmmoInMagazine;
-}
-
-bool AWeaponActor::HasAmmo()
-{
-	return data.currentAmmo > 0;
-}
-
-void AWeaponActor::StopReload()
-{
-	if (IsValidTimelines() && reloadTimeline->IsPlaying())
-	{
-		reloadTimeline->Stop();
-	}
-}
-
-void AWeaponActor::CheckAmmoInMagazine()
-{
-	if (!HasAmmoInMagazine())
-	{
-		fireTimeline->Stop();
-		if (CanStartReloadTimeline())
-		{
-			StartReload();
-		}
-	}
-}
-
-void AWeaponActor::SetOwnerTeam(ETeam newTeam)
-{
-	currentTeam = newTeam;
-}
-
-void AWeaponActor::SetWeaponOwner(IWeaponOwner* newOwner)
-{
-	owner = newOwner;
-}
-
-void AWeaponActor::FillMagazine()
-{
-	uint16 freeSpace = data.maxAmmoInMagazine - data.currentAmmoInMagazine;
-	if (freeSpace > 0)
-	{
-		if (data.currentAmmo > freeSpace)
-		{
-			data.currentAmmo -= freeSpace;
-		} else
-		{
-			freeSpace = data.currentAmmo;
-			data.currentAmmo = 0;
-		}
-		data.currentAmmoInMagazine += freeSpace;
-	}
-	PlayReloadingFinishSound();
-	owner->ReloadEvent();
-}
-
-FWeaponData AWeaponActor::GetData()
-{
-	return data;
-}
-
 void AWeaponActor::Client_AddDamage(IDestroyableObject* object)
 {
 	const float damage = data.damage;
@@ -317,4 +232,89 @@ void AWeaponActor::AddDamage(UObject* object, const float damage)
 {
 	IDestroyableObject* damagedObject = Cast<IDestroyableObject>(object);
 	damagedObject->TakeDamage(damage);
+}
+
+void AWeaponActor::CheckAmmoInMagazine()
+{
+	if (!HasAmmoInMagazine())
+	{
+		fireTimeline->Stop();
+		if (CanStartReloadTimeline())
+		{
+			StartReload();
+		}
+	}
+}
+
+bool AWeaponActor::CanStartReloadTimeline()
+{
+	return IsValidTimelines() && IsTimelinesStopped() && HasSpaceInMagazine() && HasAmmo();
+}
+
+bool AWeaponActor::HasSpaceInMagazine()
+{
+	return data.currentAmmoInMagazine < data.maxAmmoInMagazine;
+}
+
+bool AWeaponActor::HasAmmo()
+{
+	return data.currentAmmo > 0;
+}
+
+void AWeaponActor::PlayShotSound()
+{
+	PlaySound(shotSound);
+}
+
+void AWeaponActor::Server_FireEvent_Implementation(UObject* context)
+{
+	IWeaponOwner* weaponOwner = Cast<IWeaponOwner>(context);
+	weaponOwner->FireEvent();
+}
+
+bool AWeaponActor::Server_FireEvent_Validate(UObject* context)
+{
+	return true;
+}
+
+void AWeaponActor::Reload()
+{
+	if (CanStartReloadTimeline())
+	{
+		StartReload();
+	}
+}
+
+void AWeaponActor::StartReload()
+{
+	PlayReloadingStartSound();
+	reloadTimeline->PlayFromStart();
+}
+
+void AWeaponActor::PlayReloadingStartSound()
+{
+	PlaySound(reloadingStartSound);
+}
+
+void AWeaponActor::StopReload()
+{
+	if (IsValidTimelines() && reloadTimeline->IsPlaying())
+	{
+		reloadTimeline->Stop();
+	}
+}
+
+void AWeaponActor::SetOwnerTeam(ETeam newTeam)
+{
+	currentTeam = newTeam;
+}
+
+void AWeaponActor::SetWeaponOwner(IWeaponOwner* newOwner)
+{
+	owner = newOwner;
+}
+
+FWeaponData AWeaponActor::GetData()
+{
+	return data;
 }

@@ -25,35 +25,6 @@ void APlayerCharacter::SetUseControllerRotation()
 	this->bUseControllerRotationRoll = true;
 }
 
-void APlayerCharacter::TakeDamage(float damage)
-{
-	Super::TakeDamage(damage);
-	Notify();
-	//if (Role < ROLE_Authority)
-	//{
-	//	Server_Notify();
-	//} else
-	//{
-	//	Notify();
-	//}
-}
-
-void APlayerCharacter::Client_Notify_Implementation()
-{
-	Notify();
-}
-
-void APlayerCharacter::Server_Notify_Implementation(UObject* context)
-{
-	//Notify(UObject* context);
-}
-
-bool APlayerCharacter::Server_Notify_Validate(UObject* context)
-{
-	IPlayerSubject* subject = Cast<IPlayerSubject>(context);
-	return subject != nullptr;
-}
-
 void APlayerCharacter::CreateAndAttachCamera()
 {
 	CreateCamera();
@@ -71,30 +42,9 @@ void APlayerCharacter::AttachCamera()
 	cameraComponent->SetupAttachment(RootComponent);
 }
 
-void APlayerCharacter::OnConstruction(const FTransform& transform)
+void APlayerCharacter::TakeDamage(float damage)
 {
-	Super::OnConstruction(transform);
-	SetCameraRelativeLocation();
-}
-
-void APlayerCharacter::SetCameraRelativeLocation()
-{
-	FVector relativeLocation = FVector(0.f, 0.f, 60.f);
-	cameraComponent->SetRelativeLocation(relativeLocation);
-}
-
-FVector APlayerCharacter::GetEyesPosition()
-{
-	return cameraComponent->GetComponentLocation();
-}
-
-FVector APlayerCharacter::GetEyesForwardVector()
-{
-	return cameraComponent->GetForwardVector();
-}
-
-void APlayerCharacter::FireEvent()
-{
+	Super::TakeDamage(damage);
 	Notify();
 	//if (Role < ROLE_Authority)
 	//{
@@ -103,22 +53,10 @@ void APlayerCharacter::FireEvent()
 	//{
 	//	Notify();
 	//}
-	//Client_Notify();
-}
-
-void APlayerCharacter::ReloadEvent()
-{
-	Notify();
-}
-
-FWeaponData APlayerCharacter::GetWeaponData()
-{
-	return weapon->GetData();
 }
 
 void APlayerCharacter::NextWeapon()
 {
-
 	TArray<AWeaponActor*> weaponArray = weaponSet.Array();
 	int32 currentWeaponID = 0;
 
@@ -175,4 +113,65 @@ void APlayerCharacter::PreviousWeapon()
 	}
 
 	Notify();
+}
+
+FWeaponData APlayerCharacter::GetWeaponData()
+{
+	return weapon->GetData();
+}
+
+void APlayerCharacter::OnConstruction(const FTransform& transform)
+{
+	Super::OnConstruction(transform);
+	SetCameraRelativeLocation();
+}
+
+void APlayerCharacter::SetCameraRelativeLocation()
+{
+	FVector relativeLocation = FVector(0.f, 0.f, 60.f);
+	cameraComponent->SetRelativeLocation(relativeLocation);
+}
+
+FVector APlayerCharacter::GetEyesPosition()
+{
+	return cameraComponent->GetComponentLocation();
+}
+
+FVector APlayerCharacter::GetEyesForwardVector()
+{
+	return cameraComponent->GetForwardVector();
+}
+
+void APlayerCharacter::FireEvent()
+{
+	Notify();
+	//if (Role < ROLE_Authority)
+	//{
+	//	Server_Notify();
+	//} else
+	//{
+	//	Notify();
+	//}
+	//Client_Notify();
+}
+
+void APlayerCharacter::ReloadEvent()
+{
+	Notify();
+}
+
+void APlayerCharacter::Client_Notify_Implementation()
+{
+	Notify();
+}
+
+void APlayerCharacter::Server_Notify_Implementation(UObject* context)
+{
+	//Notify(UObject* context);
+}
+
+bool APlayerCharacter::Server_Notify_Validate(UObject* context)
+{
+	IPlayerSubject* subject = Cast<IPlayerSubject>(context);
+	return subject != nullptr;
 }

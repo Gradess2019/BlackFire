@@ -2,8 +2,6 @@
 
 #include "PlayerSubject.h"
 
-// Add default functionality here for any IPlayerSubject functions that are not pure virtual.
-
 void IPlayerSubject::AttachObserver(IPlayerObserver* newObserver)
 {
 	if (newObserver)

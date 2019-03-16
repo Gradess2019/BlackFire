@@ -71,19 +71,24 @@ private:
 	void InitReloadTimeline();
 	inline void InitLineTrace();
 
-	inline bool IsValidTimelines();
-	inline bool IsTimelinesStopped();
+	void EnableShootingMode();
+
 	inline bool CanStartFireTimeline();
 	inline bool CanStartReloadTimeline();
-
+	inline bool IsValidTimelines();
+	inline bool IsTimelinesStopped();
 	inline bool HasAmmoInMagazine();
+
 	inline bool HasSpaceInMagazine();
 	inline bool HasAmmo();
 
 	void CheckAmmoInMagazine();
-	
-	void EnableShootingMode();
 
+	void StartReload();
+
+	UFUNCTION()
+	void FillMagazine();
+	
 	FHitResult GetHit();
 
 	void PlaySound(USoundWave* sound);
@@ -91,20 +96,16 @@ private:
 	void PlayReloadingStartSound();
 	void PlayReloadingFinishSound();
 
-	void StartReload();
-	
-	
-	UFUNCTION()
-	void FillMagazine();
-
 	void Client_AddDamage(IDestroyableObject* damagedObject);
 
 	UFUNCTION(Server, Reliable, WithValidation)
-	void Server_AddDamage(UObject* object, const float damage);
-	
+		void Server_AddDamage(UObject* object, const float damage);
+
 	void AddDamage(UObject* object, const float damage);
 
 	UFUNCTION(Server, Reliable, WithValidation)
-	void Server_FireEvent(UObject* context);
+		void Server_FireEvent(UObject* context);
+
+	
 
 };

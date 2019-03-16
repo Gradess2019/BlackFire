@@ -16,16 +16,19 @@
 UCLASS(Blueprintable)
 class BLACKFIRE_API ACustomPlayerController : public APlayerController, public IGameActions
 {
+
 	GENERATED_BODY()
+
 public:
+
 	ACustomPlayerController();
+
+private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Character configuration")
 	TSubclassOf<UGUI> GUIClass;
 
 	UCameraComponent* playerCamera;
-
-private:
 
 	UFUNCTION()
 	void BeginPlay() override;
@@ -34,9 +37,9 @@ private:
 	void InitCamera();
 	void InitGUI();
 
-
 	void PrintDebugReplicationMessage(FString message, bool isSuccess);
 	inline FString GetGamePrefix();
+	inline APlayerCharacter* GetControlledPlayer();
 
 	void SetupInputComponent() override;
 
@@ -45,19 +48,18 @@ private:
 	void LookUp(float value);
 	void TurnAround(float value);
 	
-	bool IsInputZero(float value);
-	bool IsCorrectCameraPitch(float value);
-
-	inline void NextWeapon();
-	inline void PreviousWeapon();
-	inline void Jump();
-	inline APlayerCharacter* GetControlledPlayer();
-
-	inline void Move(FVector direction, float value);
-
 	inline FVector GetRightDirection();
 	inline FVector GetForwardDirection();
 
+	inline void Move(FVector direction, float value);
+
+	bool IsInputZero(float value);
+	bool IsCorrectCameraPitch(float value);
+
+	inline void PreviousWeapon();
+	inline void NextWeapon();
+	inline void Jump();
+	
 	// GameActions implementation
 	inline void Client_StartAttack() override;
 

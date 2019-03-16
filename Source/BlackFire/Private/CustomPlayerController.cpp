@@ -71,7 +71,7 @@ void ACustomPlayerController::InitGUI()
 {
 	if (controlledPawn)
 	{
-		APlayerCharacter* player = Cast<APlayerCharacter>(controlledPawn);
+		APlayerCharacter* player = GetControlledPlayer();
 
 		UGUI* gui = CreateWidget<UGUI>(this, GUIClass);
 		if (gui)
@@ -80,6 +80,11 @@ void ACustomPlayerController::InitGUI()
 			player->AttachObserver((IPlayerObserver*)gui);
 		}
 	}
+}
+
+APlayerCharacter* ACustomPlayerController::GetControlledPlayer()
+{
+	return Cast<APlayerCharacter>(controlledPawn);
 }
 
 void ACustomPlayerController::SetupInputComponent()
@@ -161,19 +166,14 @@ void ACustomPlayerController::TurnAround(float value)
 	}
 }
 
-void ACustomPlayerController::NextWeapon()
-{
-	GetControlledPlayer()->NextWeapon();
-}
-
-APlayerCharacter* ACustomPlayerController::GetControlledPlayer()
-{
-	return Cast<APlayerCharacter>(controlledPawn);
-}
-
 void ACustomPlayerController::PreviousWeapon()
 {
 	GetControlledPlayer()->PreviousWeapon();
+}
+
+void ACustomPlayerController::NextWeapon()
+{
+	GetControlledPlayer()->NextWeapon();
 }
 
 void ACustomPlayerController::Jump()
