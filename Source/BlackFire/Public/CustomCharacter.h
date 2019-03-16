@@ -18,12 +18,17 @@ public:
 
 	ACustomCharacter();
 
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 	UFUNCTION()
 	void TakeDamage(float damage) override;
 
-	void Die();
+	//UFUNCTION(NetMulticast, Unreliable)
+	//	Multicast_TakeDamge();
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void Respawn();
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void SetTeam(ETeam newTeam);
 
 	TSet<AWeaponActor*>* GetWeaponSet();
 	
@@ -33,23 +38,40 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Character configuration")
 	TSet<TSubclassOf<AWeaponActor> > weaponClassSet;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Character configuration")
-	float health;
-
 	AWeaponActor* weapon;
 	TSet<AWeaponActor*> weaponSet;
 
+	UPROPERTY(EditDefaultsOnly, Replicated, Category = "Character configuration")
+	float health;
+
+	UPROPERTY(BlueprintReadOnly)
 	ETeam team;
+
+	UPROPERTY(BlueprintReadWrite)
+	AActor* spawnPoint;
 
 	class USceneComponent* weaponPoint;
 
 	virtual void BeginPlay() override;
+	void InitWeaponPoint();
+	void InitWeaponSet();
+	void SetupAndAttachPrimaryWeapon();
+	void SetupPrimaryWeapon();
+	void AttachPrimaryWeapon();
+	void AttachWeaponActor();
+
+	UFUNCTION(BlueprintCallable)
+	void SetPositionToSpawn();
+	
+	void DecreaseHealth(float decrement);
+
 	virtual FVector GetEyesPosition() override;
 	virtual FVector GetEyesForwardVector() override;
 	virtual uint32 GetID() override;
 	virtual void FireEvent() override;
 	virtual void ReloadEvent() override;
+
+	FName GetSpawnPointTag();
+
 	
-	void AttachWeaponActor();
 };

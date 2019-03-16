@@ -7,17 +7,17 @@ void ACustomNPCController::BeginPlay()
 	controlledPawn = Cast<ACustomCharacter>(GetPawn());
 }
 
-void ACustomNPCController::StartAttack()
+void ACustomNPCController::Client_StartAttack()
 {
 
 }
 
-void ACustomNPCController::StopAttack()
+void ACustomNPCController::Client_StopAttack()
 {
 
 }
 
-void ACustomNPCController::Reload()
+void ACustomNPCController::Client_Reload()
 {
 
 }

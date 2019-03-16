@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "BlackFire.generated.h"
 
-UENUM()
+UENUM(BlueprintType)
 enum class ETeam : uint8
 {
 	None,

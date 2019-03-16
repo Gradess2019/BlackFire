@@ -8,8 +8,10 @@
 #include "WeaponOwner.h"
 #include "DestroyableObject.h"
 #include "BlackFire.h"
+#include "Sound/SoundWave.h"
 #include "GameFramework/Actor.h"
 #include "WeaponActor.generated.h"
+
 
 UCLASS()
 class BLACKFIRE_API AWeaponActor : public AActor
@@ -32,6 +34,8 @@ public:
 	UFUNCTION()
 	void Reload();
 
+	void StopReload();
+
 	void SetOwnerTeam(ETeam newTeam);
 	void SetWeaponOwner(IWeaponOwner* newOwner);
 
@@ -42,6 +46,15 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon configuration")
 	FWeaponData data;
 	
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon configuration")
+	USoundWave* shotSound; 
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon configuration")
+	USoundWave* reloadingStartSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon configuration")
+	USoundWave* reloadingFinishSound;
+
 	ETeam currentTeam;
 
 	const FName fireTraceTag;
@@ -58,22 +71,41 @@ private:
 	void InitReloadTimeline();
 	inline void InitLineTrace();
 
-	inline bool IsValidTimelines();
-	inline bool IsTimelinesStopped();
+	void EnableShootingMode();
+
 	inline bool CanStartFireTimeline();
 	inline bool CanStartReloadTimeline();
-
+	inline bool IsValidTimelines();
+	inline bool IsTimelinesStopped();
 	inline bool HasAmmoInMagazine();
+
 	inline bool HasSpaceInMagazine();
 	inline bool HasAmmo();
 
 	void CheckAmmoInMagazine();
-	
-	void EnableShootingMode();
 
-	FHitResult GetHit();
-	
+	void StartReload();
+
 	UFUNCTION()
 	void FillMagazine();
 	
+	FHitResult GetHit();
+
+	void PlaySound(USoundWave* sound);
+	void PlayShotSound();
+	void PlayReloadingStartSound();
+	void PlayReloadingFinishSound();
+
+	void Client_AddDamage(IDestroyableObject* damagedObject);
+
+	UFUNCTION(Server, Reliable, WithValidation)
+		void Server_AddDamage(UObject* object, const float damage);
+
+	void AddDamage(UObject* object, const float damage);
+
+	UFUNCTION(Server, Reliable, WithValidation)
+		void Server_FireEvent(UObject* context);
+
+	
+
 };

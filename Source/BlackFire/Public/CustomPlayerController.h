@@ -16,8 +16,11 @@
 UCLASS(Blueprintable)
 class BLACKFIRE_API ACustomPlayerController : public APlayerController, public IGameActions
 {
+
 	GENERATED_BODY()
+
 public:
+
 	ACustomPlayerController();
 
 private:
@@ -32,8 +35,12 @@ private:
 	
 	inline void InitControlledPawn();
 	void InitCamera();
+	void InitGUI();
 
-	
+	void PrintDebugReplicationMessage(FString message, bool isSuccess);
+	inline FString GetGamePrefix();
+	inline APlayerCharacter* GetControlledPlayer();
+
 	void SetupInputComponent() override;
 
 	void MoveForward(float value);
@@ -41,21 +48,37 @@ private:
 	void LookUp(float value);
 	void TurnAround(float value);
 	
-	bool IsInputZero(float value);
-	bool IsCorrectCameraPitch(float value);
-
-	inline void NextWeapon();
-	inline void PreviousWeapon();
-	inline APlayerCharacter* GetControlledPlayer();
-
-
-	inline void Move(FVector direction, float value);
-
 	inline FVector GetRightDirection();
 	inline FVector GetForwardDirection();
 
-	inline void StartAttack() override;
-	inline void StopAttack() override;
-	inline void Reload() override;
+	inline void Move(FVector direction, float value);
 
+	bool IsInputZero(float value);
+	bool IsCorrectCameraPitch(float value);
+
+	inline void PreviousWeapon();
+	inline void NextWeapon();
+	inline void Jump();
+	
+	// GameActions implementation
+	inline void Client_StartAttack() override;
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void Server_StartAttack(ACustomCharacter* controlledPawn);
+
+	void StartAttack(ACustomCharacter* controlledPawn);
+
+	inline void Client_StopAttack() override;
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void Server_StopAttack(ACustomCharacter* controlledPawn);
+
+	void StopAttack(ACustomCharacter* controlledPawn);
+
+	inline void Client_Reload() override;
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void Server_Reload(ACustomCharacter* controlledPawn);
+
+	void Reload(ACustomCharacter* controlledPawn);
 };

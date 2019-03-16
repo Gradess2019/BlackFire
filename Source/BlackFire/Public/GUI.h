@@ -10,7 +10,7 @@
 #include "GUI.generated.h"
 
 /**
- * 
+ * Base viewport GUI class
  */
 UCLASS()
 class BLACKFIRE_API UGUI : public UUserWidget, public IPlayerObserver

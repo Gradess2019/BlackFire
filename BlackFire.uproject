@@ -14,5 +14,15 @@
 				"UMG"
 			]
 		}
+	],
+	"Plugins": [
+		{
+			"Name": "NiagaraExtras",
+			"Enabled": true
+		},
+		{
+			"Name": "Niagara",
+			"Enabled": true
+		}
 	]
 }
