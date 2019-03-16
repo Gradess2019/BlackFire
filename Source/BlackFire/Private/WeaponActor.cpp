@@ -3,6 +3,7 @@
 #include "WeaponActor.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Kismet/GameplayStatics.h"
 
 #define DestroyableObjectTrace ECC_GameTraceChannel1
 
@@ -123,6 +124,8 @@ void AWeaponActor::Fire()
 {
 	FHitResult hit = GetHit();
 	IDestroyableObject* hitObject = Cast<IDestroyableObject>(hit.GetActor());
+	PlayShotSound();
+
 	data.currentAmmoInMagazine--;
 
 	if (hitObject)
@@ -139,6 +142,29 @@ void AWeaponActor::Fire()
 	}
 	
 	CheckAmmoInMagazine();
+}
+
+void AWeaponActor::PlayShotSound()
+{
+	PlaySound(shotSound);
+}
+
+void AWeaponActor::PlaySound(USoundWave* sound)
+{
+	if (sound)
+	{
+		UGameplayStatics::PlaySound2D(GetWorld(), sound);
+	}
+}
+
+void AWeaponActor::PlayReloadingStartSound()
+{
+	PlaySound(reloadingStartSound);
+}
+
+void AWeaponActor::PlayReloadingFinishSound()
+{
+	PlaySound(reloadingFinishSound);
 }
 
 void AWeaponActor::Server_FireEvent_Implementation(UObject* context)
@@ -185,8 +211,14 @@ void AWeaponActor::Reload()
 {
 	if (CanStartReloadTimeline())
 	{
-		reloadTimeline->PlayFromStart();
+		StartReload();
 	}
+}
+
+void AWeaponActor::StartReload()
+{
+	PlayReloadingStartSound();
+	reloadTimeline->PlayFromStart();
 }
 
 bool AWeaponActor::CanStartReloadTimeline()
@@ -219,7 +251,7 @@ void AWeaponActor::CheckAmmoInMagazine()
 		fireTimeline->Stop();
 		if (CanStartReloadTimeline())
 		{
-			reloadTimeline->PlayFromStart();
+			StartReload();
 		}
 	}
 }
@@ -249,6 +281,7 @@ void AWeaponActor::FillMagazine()
 		}
 		data.currentAmmoInMagazine += freeSpace;
 	}
+	PlayReloadingFinishSound();
 	owner->ReloadEvent();
 }
 

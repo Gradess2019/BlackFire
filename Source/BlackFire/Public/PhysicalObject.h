@@ -15,10 +15,12 @@ class BLACKFIRE_API APhysicalObject : public AActor, public IDestroyableObject
 public:
 	void TakeDamage(float damage) override;
 
-private:
-	
-	UPROPERTY(EditDefaultsOnly, Category = "Object configuration")
+protected:
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Physical Object")
+	void DoDestroy();
+
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Object configuration")
 	float condition;
 
-	virtual void Destroyed() override;
 };

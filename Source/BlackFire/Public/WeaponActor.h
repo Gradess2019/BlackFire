@@ -8,8 +8,10 @@
 #include "WeaponOwner.h"
 #include "DestroyableObject.h"
 #include "BlackFire.h"
+#include "Sound/SoundWave.h"
 #include "GameFramework/Actor.h"
 #include "WeaponActor.generated.h"
+
 
 UCLASS()
 class BLACKFIRE_API AWeaponActor : public AActor
@@ -44,6 +46,15 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon configuration")
 	FWeaponData data;
 	
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon configuration")
+	USoundWave* shotSound; 
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon configuration")
+	USoundWave* reloadingStartSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon configuration")
+	USoundWave* reloadingFinishSound;
+
 	ETeam currentTeam;
 
 	const FName fireTraceTag;
@@ -74,6 +85,14 @@ private:
 	void EnableShootingMode();
 
 	FHitResult GetHit();
+
+	void PlaySound(USoundWave* sound);
+	void PlayShotSound();
+	void PlayReloadingStartSound();
+	void PlayReloadingFinishSound();
+
+	void StartReload();
+	
 	
 	UFUNCTION()
 	void FillMagazine();
