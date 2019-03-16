@@ -3,6 +3,7 @@
 #include "WeaponActor.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Kismet/GameplayStatics.h"
 
 #define DestroyableObjectTrace ECC_GameTraceChannel1
 
@@ -123,6 +124,8 @@ void AWeaponActor::Fire()
 {
 	FHitResult hit = GetHit();
 	IDestroyableObject* hitObject = Cast<IDestroyableObject>(hit.GetActor());
+	PlayShotSound();
+
 	data.currentAmmoInMagazine--;
 
 	if (hitObject)
@@ -139,6 +142,16 @@ void AWeaponActor::Fire()
 	}
 	
 	CheckAmmoInMagazine();
+}
+
+void AWeaponActor::PlayShotSound()
+{
+	{
+		if (shotSound)
+		{
+			UGameplayStatics::PlaySound2D(GetWorld(), shotSound);
+		}
+	}
 }
 
 void AWeaponActor::Server_FireEvent_Implementation(UObject* context)
