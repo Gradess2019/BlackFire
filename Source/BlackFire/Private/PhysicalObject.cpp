@@ -10,8 +10,3 @@ void APhysicalObject::TakeDamage(float damage)
 		Destroy();
 	}
 }
-
-void APhysicalObject::Destroyed()
-{
-	//...
-}

@@ -20,5 +20,4 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Object configuration")
 	float condition;
 
-	virtual void Destroyed() override;
 };
