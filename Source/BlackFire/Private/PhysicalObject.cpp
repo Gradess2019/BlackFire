@@ -7,6 +7,11 @@ void APhysicalObject::TakeDamage(float damage)
 	condition -= damage;
 	if (condition <= 0.f)
 	{
-		Destroy();
+		DoDestroy();
 	}
+}
+
+void APhysicalObject::DoDestroy_Implementation()
+{
+	Destroy();
 }
