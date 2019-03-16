@@ -47,7 +47,13 @@ protected:
 	FWeaponData data;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon configuration")
-	USoundWave* shotSound;
+	USoundWave* shotSound; 
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon configuration")
+	USoundWave* reloadingStartSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon configuration")
+	USoundWave* reloadingFinishSound;
 
 	ETeam currentTeam;
 
@@ -80,7 +86,12 @@ private:
 
 	FHitResult GetHit();
 
+	void PlaySound(USoundWave* sound);
 	void PlayShotSound();
+	void PlayReloadingStartSound();
+	void PlayReloadingFinishSound();
+
+	void StartReload();
 	
 	
 	UFUNCTION()

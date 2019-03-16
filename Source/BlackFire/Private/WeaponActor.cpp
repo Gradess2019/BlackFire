@@ -146,12 +146,25 @@ void AWeaponActor::Fire()
 
 void AWeaponActor::PlayShotSound()
 {
+	PlaySound(shotSound);
+}
+
+void AWeaponActor::PlaySound(USoundWave* sound)
+{
+	if (sound)
 	{
-		if (shotSound)
-		{
-			UGameplayStatics::PlaySound2D(GetWorld(), shotSound);
-		}
+		UGameplayStatics::PlaySound2D(GetWorld(), sound);
 	}
+}
+
+void AWeaponActor::PlayReloadingStartSound()
+{
+	PlaySound(reloadingStartSound);
+}
+
+void AWeaponActor::PlayReloadingFinishSound()
+{
+	PlaySound(reloadingFinishSound);
 }
 
 void AWeaponActor::Server_FireEvent_Implementation(UObject* context)
@@ -198,8 +211,14 @@ void AWeaponActor::Reload()
 {
 	if (CanStartReloadTimeline())
 	{
-		reloadTimeline->PlayFromStart();
+		StartReload();
 	}
+}
+
+void AWeaponActor::StartReload()
+{
+	PlayReloadingStartSound();
+	reloadTimeline->PlayFromStart();
 }
 
 bool AWeaponActor::CanStartReloadTimeline()
@@ -232,7 +251,7 @@ void AWeaponActor::CheckAmmoInMagazine()
 		fireTimeline->Stop();
 		if (CanStartReloadTimeline())
 		{
-			reloadTimeline->PlayFromStart();
+			StartReload();
 		}
 	}
 }
@@ -262,6 +281,7 @@ void AWeaponActor::FillMagazine()
 		}
 		data.currentAmmoInMagazine += freeSpace;
 	}
+	PlayReloadingFinishSound();
 	owner->ReloadEvent();
 }
 
