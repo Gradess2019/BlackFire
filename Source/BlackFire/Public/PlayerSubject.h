@@ -16,14 +16,10 @@ class UPlayerSubject : public UInterface
 	GENERATED_BODY()
 };
 
-/**
- * 
- */
 class BLACKFIRE_API IPlayerSubject
 {
 	GENERATED_BODY()
 
-	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 
 	virtual void AttachObserver(IPlayerObserver* newObserver);
@@ -35,4 +31,5 @@ public:
 protected:
 
 	TSet<IPlayerObserver*> observers;
+
 };

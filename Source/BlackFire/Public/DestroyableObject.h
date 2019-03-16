@@ -13,15 +13,12 @@ class UDestroyableObject : public UInterface
 	GENERATED_BODY()
 };
 
-/**
- * 
- */
 class BLACKFIRE_API IDestroyableObject
 {
 	GENERATED_BODY()
 
-	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+
 	UFUNCTION()
 	virtual void TakeDamage(float damage) = 0;
 };

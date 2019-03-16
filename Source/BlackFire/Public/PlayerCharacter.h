@@ -12,20 +12,21 @@
 #include "PlayerCharacter.generated.h"
 
 class ACustomPlayerController;
-/**
- * 
- */
+
 UCLASS()
 class BLACKFIRE_API APlayerCharacter : public ACustomCharacter, public IPlayerSubject
 {
 	GENERATED_BODY()
 	
 public:
+
 	APlayerCharacter();
 
+	void TakeDamage(float damage) override;
 	void NextWeapon();
 	void PreviousWeapon();
-	void TakeDamage(float damage) override;
+
+	virtual FWeaponData GetWeaponData() override;
 
 private:
 
@@ -38,6 +39,9 @@ private:
 	inline void CreateCamera();
 	inline void AttachCamera();
 
+	void SetWeapon(int32 id);
+	AWeaponActor* GetWeaponById(int32 id);
+
 	void OnConstruction(const FTransform&) override;
 	inline void SetCameraRelativeLocation();
 
@@ -45,12 +49,7 @@ private:
 	FVector GetEyesForwardVector() override;
 	void FireEvent() override;
 	void ReloadEvent() override;
-
-	virtual FWeaponData GetWeaponData() override;
-
-	void SetWeapon(int32 id);
-	AWeaponActor* GetWeaponById(int32 id);
-
+	
 	UFUNCTION(Reliable, Client)
 	void Client_Notify();
 
